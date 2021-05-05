@@ -43,6 +43,8 @@ class Admin(commands.Cog):
     async def prefix(self, ctx, *, message):
       collection = db["Prefix"]
 
+      message = message.replace('"', '')
+
       if message != "default" and message != "ax":
         post = {"server_id": ctx.message.guild.id, "prefix": message}
       else:
