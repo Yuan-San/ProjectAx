@@ -55,18 +55,18 @@ class Admin(commands.Cog):
 
       await ctx.send("Prefix has been set! **(prefix-case-sensitivy has been disabled globally.)**")
 
-    @prefix.error
-    async def prefix_error(self, ctx, error):
-      if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'message':
+    # @prefix.error
+    # async def prefix_error(self, ctx, error):
+      # if isinstance(error, commands.MissingRequiredArgument):
+      #   if error.param.name == 'message':
 
-          collection = db["Prefix"]
+      #     collection = db["Prefix"]
 
-          a = collection.find({"server_id": ctx.message.guild.id})
-          for key, val in a.prefix():
-            b = val
+      #     a = collection.find({"server_id": ctx.message.guild.id})
+      #     for key, val in a.prefix():
+      #       b = val
 
-          await ctx.send(f"My current prefix is `{b}`")
+      #     await ctx.send(f"My current prefix is `{b}`")
 
     # die
     @commands.command()
