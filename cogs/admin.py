@@ -78,18 +78,16 @@ class Admin(commands.Cog):
       em.add_field(name="uptime", value=uptime)
 
       if message == "pull":
-        if os.system("sudo sh rAIOmp.sh") != 0:
+        if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
           var = os.system("sudo sh rAIOmp.sh")
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
-          os.system("sudo sh rAIOmp.sh")
           await ctx.send(embed = em)
       else:
-        if os.system("sudo sh rAIOm.sh") != 0:
+        if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh")
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
-          os.system("sudo sh rAIOm.sh")
           await ctx.send(embed = em)
 
     @die.error
