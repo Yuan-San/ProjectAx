@@ -79,13 +79,14 @@ class Admin(commands.Cog):
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
-          var = os.system("sudo sh rAIOmp.sh")
+          var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
+          em.title = "Updating Project Ax..."
           await ctx.send(embed = em)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
-          var = os.system("sudo sh rAIOm.sh")
+          var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           await ctx.send(embed = em)
