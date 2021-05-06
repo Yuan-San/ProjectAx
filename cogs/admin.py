@@ -79,17 +79,18 @@ class Admin(commands.Cog):
 
       if message == "pull":
         if os.system("sudo sh rAIOmp.sh") != 0:
-          await ctx.send("Couldn't run `rAIOmp.sh` *or* Project Ax is already up-to-date with the GitHub.")
+          var = os.system("sudo sh rAIOmp.sh")
+          await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           os.system("sudo sh rAIOmp.sh")
           await ctx.send(embed = em)
       else:
         if os.system("sudo sh rAIOm.sh") != 0:
-          await ctx.send("Couldn't run `rAIOm.sh`")
+          var = os.system("sudo sh rAIOm.sh")
+          await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           os.system("sudo sh rAIOm.sh")
           await ctx.send(embed = em)
-
 
     @die.error
     async def die_error(self, ctx, error):
