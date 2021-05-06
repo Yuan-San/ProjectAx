@@ -81,7 +81,7 @@ class Admin(commands.Cog):
         if os.system("sudo sh rAIOmp.sh") != 0:
           await ctx.send("Couldn't run `rAIOmp.sh`")
         else:
-          os.system("sudo sh rAIOmp.sh")
+          os.system("sudo sh rAIOmp.sh *or* Project Ax is already up-to-date with the GitHub.")
           await ctx.send(embed = em)
       else:
         if os.system("sudo sh rAIOm.sh") != 0:
