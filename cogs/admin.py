@@ -79,9 +79,9 @@ class Admin(commands.Cog):
 
       if message == "pull":
         if os.system("sudo sh rAIOmp.sh") != 0:
-          await ctx.send("Couldn't run `rAIOmp.sh`")
+          await ctx.send("Couldn't run `rAIOmp.sh` *or* Project Ax is already up-to-date with the GitHub.")
         else:
-          os.system("sudo sh rAIOmp.sh *or* Project Ax is already up-to-date with the GitHub.")
+          os.system("sudo sh rAIOmp.sh")
           await ctx.send(embed = em)
       else:
         if os.system("sudo sh rAIOm.sh") != 0:
