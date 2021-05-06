@@ -4,6 +4,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+import subprocess
 
 start_time=time.time()
 
@@ -71,20 +72,30 @@ class Admin(commands.Cog):
     # die
     @commands.command()
     @commands.is_owner()
-    async def die(self, ctx):
+    async def die(self, ctx, *, message=None):
       em = discord.Embed(title="Shutting Down..", color = 0xadcca6)
-      
       uptime=str(datetime.timedelta(seconds=int(round(time.time() - start_time))))
-      
       em.add_field(name="uptime", value=uptime)
-      await ctx.send(embed = em)
-      os.system("sudo sh rAIOm.sh")
-		
+
+      if message == "pull":
+        if os.system("sudo sh rAIOmp.sh") != 0:
+          await ctx.send("Couldn't run `rAIOmp.sh`")
+        else:
+          os.system("sudo sh rAIOmp.sh")
+          await ctx.send(embed = em)
+      else:
+        if os.system("sudo sh rAIOm.sh") != 0:
+          await ctx.send("Couldn't run `rAIOm.sh`")
+        else:
+          os.system("sudo sh rAIOm.sh")
+          await ctx.send(embed = em)
+
+
     @die.error
     async def die_error(self, ctx, error):
-      await ctx.send("Error;!is_owner()")
+      if isinstance(error, commands.NotOwner):
+        await ctx.send("Nice try! Sadly you can't kill the bot, my guy.")
 
 
-# this is the end of the code, type all mod commands above this
 def setup(client):
     client.add_cog(Admin(client))
