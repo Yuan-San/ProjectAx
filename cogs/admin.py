@@ -25,7 +25,7 @@ class Admin(commands.Cog):
         ch = self.client.get_channel(a["channel_id"])
         await ch.send("I'm back!")
 
-        msg = ch.fetch_message(a["message_id"])
+        msg = await ch.fetch_message(a["message_id"])
         await msg.edit(content="wbt")
 
     @commands.command()
