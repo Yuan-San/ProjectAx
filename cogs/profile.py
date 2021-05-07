@@ -24,8 +24,8 @@ class profile(commands.Cog):
     async def on_ready(self):
       print ('profile.py -> on_ready()')
 
-    @commands.command(aliases=['p'])
-    async def profile(self, ctx):
+    @commands.command(aliases=['cprofile', 'createp', 'cp'])
+    async def createprofile(self, ctx):
 
       collection = db["Profile"]
 
@@ -39,6 +39,7 @@ class profile(commands.Cog):
 
         if msg.content.lower() == "yes":
 
+
           MaleLooks = defaultstuff.profile()["MaleLooks"]
           FemaleLooks = defaultstuff.profile()["FemaleLooks"]
           CharacterLastName = defaultstuff.profile()["CharacterLastName"]
@@ -46,19 +47,30 @@ class profile(commands.Cog):
           CharacterFirstNameFemale = defaultstuff.profile()["CharacterFirstNameFemale"]
 
           maleFemaleRatio = [1, 2]
+          female_height = ["4'7", "4'8", "4'9", "4'10", "4'11", "5'", "5'1", "5'2", "5'3", "5'4", "5'5", "5'6", "5'7", "5'8"]
+          male_height = ["4'9", "4'10", "4'11", "5'", "5'11", "6'", "6'1", "5'4", "5'5", "5'6", "5'7", "5'8", "5'9", "5'10"]
           choice = random.choice(maleFemaleRatio)
 
           if choice == 1:
+            gender = "Male"
             looks = random.choice(MaleLooks)
             first_name = random.choice(CharacterFirstNameMale)
             last_name = random.choice(CharacterLastName)
+            height = random.choice(male_height)
           else:
+            gender = "Female"
             looks = random.choice(FemaleLooks)
             first_name = random.choice(CharacterFirstNameFemale)
             last_name = random.choice(CharacterLastName)
+            height = random.choice(female_height)
 
-          em=discord.Embed(color = 0xadcca6, title=f"{first_name} {last_name}")
-          em.set_author(name="Project Ax Profile", icon_url="https://media.discordapp.net/attachments/804705780557021214/804827293087563776/Throwing_Knives.png")
+
+          em=discord.Embed(color = 0xadcca6)
+          em.set_author(name=f"{first_name} {last_name}", icon_url="https://media.discordapp.net/attachments/804705780557021214/804827293087563776/Throwing_Knives.png")
+          em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\n Friend ID: 1234", inline=False)
+          em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
+          em.add_field(name="Level", value="Player Level: `0`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
+          # em.set_footer(text="To add a friend, wait u impatient fuck.")
           em.set_thumbnail(url=looks)
           await ctx.send(embed=em)
 
