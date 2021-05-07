@@ -19,7 +19,7 @@ class ownerOnly(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('ownerOnly.py -> on_ready()')
+      print ('owneronly.py -> on_ready()')
 
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
