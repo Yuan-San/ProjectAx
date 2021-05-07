@@ -33,7 +33,7 @@ class Admin(commands.Cog):
 
       em = discord.Embed(color=0xadcca6)
       em.description(f"**{user_name}#{user_discrim}** I'm back online!")
-      em.footer(f"It took me {restart_time} seconds to restart!")
+      # em.footer(f"It took me {restart_time} seconds to restart!")
 
       ch = self.client.get_channel(channel)
       await ch.send(embed=em)
