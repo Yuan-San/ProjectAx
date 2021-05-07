@@ -25,8 +25,8 @@ class Admin(commands.Cog):
         ch = self.client.get_channel(a["channel_id"])
         await ch.send("I'm back!")
 
-        msg = self.client.fetch_message(a["message_id"])
-        await msg.edit("wbt")
+        # msg = self.client.fetch_message(a["message_id"])
+        await a["message_id"].edit("wbt")
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -83,7 +83,8 @@ class Admin(commands.Cog):
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
           msg = await ctx.send(embed = em)
-          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg.id}}, upsert=True)
+          msg = ctx.fetch_message(msg.id)
+          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
 
     @die.error
     async def die_error(self, ctx, error):
