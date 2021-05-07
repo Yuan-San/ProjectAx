@@ -25,11 +25,8 @@ class Admin(commands.Cog):
         ch = self.client.get_channel(a["channel_id"])
         await ch.send("I'm back!")
 
-        em = discord.Embed(color = 0xadcca6)
-        em.footer = "edit: I'm back online!"
-
         msg = self.client.fetch_message(a["message_id"])
-        await msg.edit(embed = em)
+        await msg.edit("wbt")
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
