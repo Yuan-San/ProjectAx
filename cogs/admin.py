@@ -23,10 +23,12 @@ class Admin(commands.Cog):
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
         ch = self.client.get_channel(a["channel_id"])
-        await ch.send("I'm back!")
 
-        msg = await ch.fetch_message(a["message_id"])
-        await msg.edit(content="wbt")
+        embed = discord.Embed(color=0xadcca6)
+        embed.description(f"**{ctx.author.name}#{ctx.author.discriminator}** I'm back online!")
+        embed.footer(f"It took me HERE seconds to restart!")
+
+        await ch.send(embed=embed)
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -67,6 +69,7 @@ class Admin(commands.Cog):
       em = discord.Embed(color = 0xadcca6)
 
       collection = db["DieMessage"]
+      collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id}}, upsert=True)
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
@@ -74,18 +77,14 @@ class Admin(commands.Cog):
           await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
-          msg = await ctx.send(embed = em)
-          msg = await ctx.fetch_message(msg.id)
-          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
+          await ctx.send(embed = em)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
-          msg = await ctx.send(embed = em)
-          msg = await ctx.fetch_message(msg.id)
-          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
+          await ctx.send(embed = em)
 
     @die.error
     async def die_error(self, ctx, error):
