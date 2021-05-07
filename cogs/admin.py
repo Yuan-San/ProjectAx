@@ -31,9 +31,8 @@ class Admin(commands.Cog):
       time_now = datetime.now()
       restart_time = (time_now - time_on_die).total_seconds()
 
-      em = discord.Embed(color=0xadcca6)
-      em.description(f"**{user_name}#{user_discrim}** I'm back online!")
-      # em.footer(f"It took me {restart_time} seconds to restart!")
+      em = discord.Embed(color=0xadcca6, description = (f"**{user_name}#{user_discrim}** I'm back online!"))
+      em.set_footer(f"It took me {restart_time} seconds to restart!")
 
       ch = self.client.get_channel(channel)
       await ch.send(embed=em)
