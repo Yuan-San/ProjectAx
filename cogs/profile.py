@@ -67,15 +67,14 @@ class profile(commands.Cog):
             height = random.choice(female_height)
             age = random.choice(age)
 
+          user_name = f"{ctx.author.name}#{ctx.author.discriminator}"
 
           em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
-          em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: 1234", inline=False)
+          em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {user_name}", inline=False)
           em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
           em.add_field(name="Level", value="Player Level: `0`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
           em.set_thumbnail(url=looks)
           await ctx.send(embed=em)
-
-          user_name = f"{ctx.author.name}#{ctx.author.discriminator}"
 
           collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": "Male", "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age}}, upsert=True)
 
