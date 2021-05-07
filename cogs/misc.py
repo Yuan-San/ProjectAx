@@ -26,7 +26,9 @@ class Miscellaneous(commands.Cog):
     # ping
     @commands.command()
     async def ping(self, ctx):
-      await ctx.send(f"self.client.latency; `{round(self.client.latency * 1000)}ms`")
+      em = discord.Embed(color=0xadcca6, description = (f"**{ctx.author.name}#{ctx.author.discriminator}** Latency: `{round(self.client.latency * 1000)}ms`"))
+
+      await ctx.send(embed=em)
 
     # invite
     @commands.command(aliases=['inv'])
