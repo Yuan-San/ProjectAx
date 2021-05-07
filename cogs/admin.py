@@ -3,6 +3,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 intents = discord.Intents.default()
 intents.members = True
@@ -23,10 +24,16 @@ class Admin(commands.Cog):
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
         ch = self.client.get_channel(a["channel_id"])
+        user_name = a["user.name"]
+        user_discrim = a["user_discrim"]
+
+        time_on_die = a["time_on_die"]
+        time_now = datetime.now()
+        restart_time = (time_now - time_on_die).total_seconds()
 
         embed = discord.Embed(color=0xadcca6)
-        embed.description(f"**{ctx.author.name}#{ctx.author.discriminator}** I'm back online!")
-        embed.footer(f"It took me HERE seconds to restart!")
+        embed.description(f"**{user_name}#{user_discrim}** I'm back online!")
+        embed.footer(f"It took me {restart_time} seconds to restart!")
 
         await ch.send(embed=embed)
 
@@ -67,9 +74,10 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def die(self, ctx, *, message=None):
       em = discord.Embed(color = 0xadcca6)
+      time_on_die = datetime.now()
 
       collection = db["DieMessage"]
-      collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id}}, upsert=True)
+      collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "user_name": ctx.author.name, "user_discrim": ctx.author.discriminator, "time_on_die": time_on_die}}, upsert=True)
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
