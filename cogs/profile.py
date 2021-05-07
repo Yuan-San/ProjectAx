@@ -24,6 +24,8 @@ class profile(commands.Cog):
     @commands.command(aliases=['cprofile', 'createprofile', 'createp'])
     async def create_profile(self, ctx):
 
+      collection = db["Profile"]
+
       em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to create your profile? **You can only do this once, and changing your profile is impossible.**")
       em.set_footer(text="Please type \"yes\" to confirm. Type anything else to cancel this command.")
 
