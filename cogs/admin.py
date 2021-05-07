@@ -75,7 +75,8 @@ class Admin(commands.Cog):
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
           msg = await ctx.send(embed = em)
-          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg.id}}, upsert=True)
+          msg = await ctx.fetch_message(msg.id)
+          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
@@ -83,7 +84,7 @@ class Admin(commands.Cog):
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
           msg = await ctx.send(embed = em)
-          msg = ctx.fetch_message(msg.id)
+          msg = await ctx.fetch_message(msg.id)
           collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
 
     @die.error
