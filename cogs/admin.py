@@ -25,6 +25,12 @@ class Admin(commands.Cog):
         ch = self.client.get_channel(a["channel_id"])
         await ch.send("I'm back!")
 
+        em = discord.Embed(color = 0xadcca6)
+        em.footer = "edit: I'm back online!"
+
+        msg = self.client.fetch_message(a["message_id"])
+        await msg.edit(embed = em)
+
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def prefix(self, ctx, *, message):
@@ -64,7 +70,6 @@ class Admin(commands.Cog):
       em = discord.Embed(color = 0xadcca6)
 
       collection = db["DieMessage"]
-      collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id}}, upsert=True)
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
@@ -72,14 +77,16 @@ class Admin(commands.Cog):
           await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
-          await ctx.send(embed = em)
+          msg = await ctx.send(embed = em)
+          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg.id}}, upsert=True)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
-          await ctx.send(embed = em)
+          msg = await ctx.send(embed = em)
+          collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg.id}}, upsert=True)
 
     @die.error
     async def die_error(self, ctx, error):
