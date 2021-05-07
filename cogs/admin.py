@@ -23,19 +23,20 @@ class Admin(commands.Cog):
 
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
-        ch = self.client.get_channel(a["channel_id"])
+        channel = a["channel_id"]
         user_name = a["user_name"]
         user_discrim = a["user_discrim"]
-
         time_on_die = a["time_on_die"]
-        time_now = datetime.now()
-        restart_time = (time_now - time_on_die).total_seconds()
 
-        em = discord.Embed(color=0xadcca6)
-        em.description(f"**{user_name}#{user_discrim}** I'm back online!")
-        em.footer(f"It took me {restart_time} seconds to restart!")
+      time_now = datetime.now()
+      restart_time = (time_now - time_on_die).total_seconds()
 
-        await ch.send(embed=em)
+      em = discord.Embed(color=0xadcca6)
+      em.description(f"**{user_name}#{user_discrim}** I'm back online!")
+      em.footer(f"It took me {restart_time} seconds to restart!")
+
+      ch = self.client.get_channel(channel)
+      await ch.send(embed=em)
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
