@@ -24,7 +24,7 @@ class Admin(commands.Cog):
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
         ch = self.client.get_channel(a["channel_id"])
-        user_name = a["user.name"]
+        user_name = a["user_name"]
         user_discrim = a["user_discrim"]
 
         time_on_die = a["time_on_die"]
