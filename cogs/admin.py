@@ -68,14 +68,14 @@ class Admin(commands.Cog):
           var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
-          em.description = "Updating Project Ax..."
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
           await ctx.send(embed = em)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
-          em.description = "Shutting Down.."
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
           await ctx.send(embed = em)
 
     @die.error
