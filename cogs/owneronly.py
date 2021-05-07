@@ -13,13 +13,13 @@ load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
-class Admin(commands.Cog):
+class ownerOnly(commands.Cog):
     def __init__(self, client):
         self.client = client
     
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('admin.py -> on_ready()')
+      print ('ownerOnly.py -> on_ready()')
 
       msg = db["DieMessage"].find({"_id": 1})
       for a in msg:
@@ -35,39 +35,6 @@ class Admin(commands.Cog):
 
       ch = self.client.get_channel(channel)
       await ch.send(embed=em)
-
-    @commands.command()
-    @commands.has_permissions(manage_guild=True)
-    async def prefix(self, ctx, *, message):
-      collection = db["Prefix"]
-      if message == "default" or message == "ax": message = "ax "
-      message = message.replace('"', '')
-
-      b = "ax "
-      prefix = collection.find({"server_id": ctx.message.guild.id})
-      for a in prefix:
-        b = a["prefix"]
-
-      collection.update_one({"server_id": ctx.message.guild.id}, {"$set":{"prefix": message}}, upsert=True)
-
-      em = discord.Embed(color=0xadcca6)
-      em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Changed prefix on this server from `{b}` to `{message}`"
-      await ctx.send(embed=em)
-
-    @prefix.error
-    async def prefix_error(self, ctx, error):
-      if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == "message":
-          collection = db["Prefix"]
-
-          b = "ax "
-          prefix = collection.find({"server_id": ctx.message.guild.id})
-          for a in prefix:
-            b = a["prefix"]
-
-          em = discord.Embed(color=0xadcca6)
-          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Prefix on this server is `{b}`"
-          await ctx.send(embed=em)
 
     @commands.command()
     @commands.is_owner()
@@ -99,4 +66,4 @@ class Admin(commands.Cog):
         await ctx.send("Error: you're not bot owner.")
 
 def setup(client):
-    client.add_cog(Admin(client))
+    client.add_cog(ownerOnly(client))

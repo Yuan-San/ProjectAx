@@ -43,24 +43,11 @@ class Miscellaneous(commands.Cog):
         em = discord.Embed(title = "Documentation", description = "soon.", color = 0xadcca6)
 
         await ctx.send(embed = em)
-
-     # open source
-    @commands.command(aliases=['code', 'source'])
-    async def opensource(self, ctx):
-      await ctx.send("source code here soon idk")
-    
-    # avatar
-    @commands.command(aliases=['av', 'pfp', 'profilepic', 'profilepicture'])
-    @commands.guild_only() # only able to do this command in a server (not in DM)
-    async def avatar(self, ctx, *, user: discord.Member = None):
-        user = user or ctx.author
-        # size = size or 1024 # gotta figure this out later
-        size = 1024
-        await ctx.send(f"{user.name}'s avatar・꒷꒦\n{user.avatar_url_as(size=size)}")
 		
     # say
     @commands.command(aliases=['repeat', 'speak'])
-    async def say(self, ctx, *, msg="please provide text for me to say!"):
+    @commands.has_permissions(manage_guild=True)
+    async def say(self, ctx, *, msg="Please provide text for me to say!"):
         await ctx.send(msg)
         await ctx.message.delete()
 		
@@ -79,36 +66,7 @@ class Miscellaneous(commands.Cog):
 
         em.add_field(name="server count", value = f"{str(len(self.client.guilds))}")
 
-        await ctx.send(embed = em)
-
-    # greet msg
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-      collection = db["Greetings"]
-      results = collection.find({"server_id": member.guild.id})
-
-      for result in results:
-        msg = result["message"]
-        guild = result["server_id"]
-        ch = result["channel_id"]
-
-      server = self.client.get_guild(guild)
-      channel = server.get_channel(ch)
-      await channel.send(msg)
-        
-    @commands.command()
-    @commands.has_permissions(manage_guild=True)
-    async def greetmsg(self, ctx, *, message):
-      collection = db["Greetings"]
-
-      post = {"server_id": ctx.message.guild.id, "message": message, "channel_id": ctx.message.channel.id}
-
-      collection.delete_many({"server_id": ctx.message.guild.id})
-      collection.insert_one(post)
-
-      await ctx.send("Welcome message has been set in this channel.")
-
-    
+        await ctx.send(embed = em)    
 
 # this is the end of the code, type all mod commands above this
 def setup(client):

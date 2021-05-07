@@ -5,8 +5,6 @@ from discord.ext import commands
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# python -m pip install dnspython
-
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
@@ -34,16 +32,6 @@ async def on_ready():
   print('Bot is online.')
   game = discord.Game("ax help")
   await client.change_presence(status=discord.Status.online, activity=game)
-
-# @client.event
-# async def on_command_error(ctx, error):
-#   if isinstance(error, commands.MissingRequiredArgument):
-#     await ctx.send("Error;MissingRequiredArgument")
-#   if isinstance(error, commands.MissingPermissions):
-#     await ctx.send("Error;MissingPermissions")
-#   if isinstance(error, commands.BotMissingPermissions):
-#     await ctx.send("Error;BotMissingPermissions")
-
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
