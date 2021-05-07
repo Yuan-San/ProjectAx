@@ -59,22 +59,23 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def die(self, ctx, *, message=None):
-      em = discord.Embed(title="Shutting Down..", color = 0xadcca6)
-      uptime=str(datetime.timedelta(seconds=int(round(time.time() - start_time))))
-      em.add_field(name="uptime", value=uptime)
+      em = discord.Embed(color = 0xadcca6)
+      # uptime=str(datetime.timedelta(seconds=int(round(time.time() - start_time))))
+      # em.add_field(name="uptime", value=uptime)
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
           var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
-          em.title = "Updating Project Ax..."
+          em.description = "Updating Project Ax..."
           await ctx.send(embed = em)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
           await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
+          em.description = "Shutting Down.."
           await ctx.send(embed = em)
 
     @die.error
