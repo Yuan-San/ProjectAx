@@ -4,6 +4,9 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
+import json
+from StuffsWeNeed import defaultstuff
+import random
 
 intents = discord.Intents.default()
 intents.members = True
@@ -21,8 +24,8 @@ class profile(commands.Cog):
     async def on_ready(self):
       print ('profile.py -> on_ready()')
 
-    @commands.command(aliases=['cprofile', 'createprofile', 'createp'])
-    async def create_profile(self, ctx):
+    @commands.command(aliases=['p'])
+    async def profile(self, ctx):
 
       collection = db["Profile"]
 
@@ -35,8 +38,32 @@ class profile(commands.Cog):
         msg = await self.client.wait_for('message', timeout=30, check=lambda message:message.author == ctx.author and message.channel.id == ctx.channel.id)
 
         if msg.content.lower() == "yes":
-          await ctx.send("k")
-          
+
+          MaleLooks = defaultstuff.profile()["MaleLooks"]
+          FemaleLooks = defaultstuff.profile()["FemaleLooks"]
+          CharacterLastName = defaultstuff.profile()["CharacterLastName"]
+          CharacterFirstNameMale = defaultstuff.profile()["CharacterFirstNameMale"]
+          CharacterFirstNameFemale = defaultstuff.profile()["CharacterFirstNameFemale"]
+
+          maleFemaleRatio = [1, 2]
+          choice = random.choice(maleFemaleRatio)
+
+          if choice == 1:
+            looks = random.choice(MaleLooks)
+            first_name = random.choice(CharacterFirstNameMale)
+            last_name = random.choice(CharacterLastName)
+          else:
+            looks = random.choice(FemaleLooks)
+            first_name = random.choice(CharacterFirstNameFemale)
+            last_name = random.choice(CharacterLastName)
+
+          em=discord.Embed(color = 0xadcca6, title=f"{first_name} {last_name}")
+          em.set_author(name="Project Ax Profile", icon_url="https://media.discordapp.net/attachments/804705780557021214/804827293087563776/Throwing_Knives.png")
+          em.set_thumbnail(url=looks)
+          await ctx.send(embed=em)
+
+
+
         else:
           await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
           return
