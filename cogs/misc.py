@@ -21,7 +21,7 @@ class Miscellaneous(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('Miscellaneous module is ready.')
+      print ('misc.py -> on_ready()')
 
     # ping
     @commands.command()

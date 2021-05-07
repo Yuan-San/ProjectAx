@@ -35,14 +35,14 @@ async def on_ready():
   game = discord.Game("ax help")
   await client.change_presence(status=discord.Status.online, activity=game)
 
-@client.event
-async def on_command_error(ctx, error):
-  if isinstance(error, commands.MissingRequiredArgument):
-    await ctx.send("Error;MissingRequiredArgument")
-  if isinstance(error, commands.MissingPermissions):
-    await ctx.send("Error;MissingPermissions")
-  if isinstance(error, commands.BotMissingPermissions):
-    await ctx.send("Error;BotMissingPermissions")
+# @client.event
+# async def on_command_error(ctx, error):
+#   if isinstance(error, commands.MissingRequiredArgument):
+#     await ctx.send("Error;MissingRequiredArgument")
+#   if isinstance(error, commands.MissingPermissions):
+#     await ctx.send("Error;MissingPermissions")
+#   if isinstance(error, commands.BotMissingPermissions):
+#     await ctx.send("Error;BotMissingPermissions")
 
 
 for filename in os.listdir('./cogs'):

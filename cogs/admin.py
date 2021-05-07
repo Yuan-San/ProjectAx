@@ -4,7 +4,6 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import subprocess
 
 start_time=time.time()
 
@@ -22,54 +21,41 @@ class Admin(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('Admin module is gae.')
+      print ('admin.py -> on_ready()')
 
-    # enable module
-    @commands.command()
-    @commands.is_owner()
-    async def enableModule(self, ctx, extension):
-      commands.load_extension(f'cogs.{extension}')
-      await ctx.send('The module was enabled!')
-
-    # disable module
-    @commands.command()
-    @commands.is_owner()
-    async def disableModule(self, ctx, extension):
-      commands.unload_extension(f'cogs.{extension}')
-      await ctx.send('The module was disabled!')
-
-    # set prefix
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def prefix(self, ctx, *, message):
       collection = db["Prefix"]
-
+      if message == "default" or message == "ax": message = "ax "
       message = message.replace('"', '')
 
-      if message != "default" and message != "ax":
-        post = {"server_id": ctx.message.guild.id, "prefix": message}
-      else:
-        post = {"server_id": ctx.message.guild.id, "prefix": "ax "}
+      b = "ax "
+      prefix = collection.find({"server_id": ctx.message.guild.id})
+      for a in prefix:
+        b = a["prefix"]
 
-      collection.delete_many({"server_id": ctx.message.guild.id})
-      collection.insert_one(post)
+      collection.update_one({"server_id": ctx.message.guild.id}, {"$set":{"prefix": message}}, upsert=True)
 
-      await ctx.send("Prefix has been set! **(prefix-case-sensitivy has been disabled globally.)**")
+      em = discord.Embed(color=0xadcca6)
+      em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Changed prefix on this server from `{b}` to `{message}`"
+      await ctx.send(embed=em)
 
-    # @prefix.error
-    # async def prefix_error(self, ctx, error):
-      # if isinstance(error, commands.MissingRequiredArgument):
-      #   if error.param.name == 'message':
+    @prefix.error
+    async def prefix_error(self, ctx, error):
+      if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == "message":
+          collection = db["Prefix"]
 
-      #     collection = db["Prefix"]
+          b = "ax "
+          prefix = collection.find({"server_id": ctx.message.guild.id})
+          for a in prefix:
+            b = a["prefix"]
 
-      #     a = collection.find({"server_id": ctx.message.guild.id})
-      #     for key, val in a.prefix():
-      #       b = val
+          em = discord.Embed(color=0xadcca6)
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Prefix on this server is `{b}`"
+          await ctx.send(embed=em)
 
-      #     await ctx.send(f"My current prefix is `{b}`")
-
-    # die
     @commands.command()
     @commands.is_owner()
     async def die(self, ctx, *, message=None):
@@ -80,7 +66,7 @@ class Admin(commands.Cog):
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
           var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
-          await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
+          await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
         else:
           em.title = "Updating Project Ax..."
           await ctx.send(embed = em)
@@ -94,8 +80,7 @@ class Admin(commands.Cog):
     @die.error
     async def die_error(self, ctx, error):
       if isinstance(error, commands.NotOwner):
-        await ctx.send("Nice try! Sadly you can't kill the bot, my guy.")
-
+        await ctx.send("Error: you're not bot owner.")
 
 def setup(client):
     client.add_cog(Admin(client))
