@@ -31,11 +31,11 @@ class Admin(commands.Cog):
         time_now = datetime.now()
         restart_time = (time_now - time_on_die).total_seconds()
 
-        embed = discord.Embed(color=0xadcca6)
-        embed.description(f"**{user_name}#{user_discrim}** I'm back online!")
-        embed.footer(f"It took me {restart_time} seconds to restart!")
+        em = discord.Embed(color=0xadcca6)
+        em.description(f"**{user_name}#{user_discrim}** I'm back online!")
+        em.footer(f"It took me {restart_time} seconds to restart!")
 
-        await ch.send(embed=embed)
+        await ch.send(embed=em)
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
