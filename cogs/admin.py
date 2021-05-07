@@ -26,7 +26,7 @@ class Admin(commands.Cog):
         await ch.send("I'm back!")
 
         # msg = self.client.fetch_message(a["message_id"])
-        await a["message_id"].edit("wbt")
+        await a["message_id"].edit(content="wbt")
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -75,7 +75,7 @@ class Admin(commands.Cog):
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
           msg = await ctx.send(embed = em)
-          # msg = await ctx.fetch_message(msg.id)
+          msg = await ctx.fetch_message(msg.id)
           collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
       else:
         if (os.system("sudo sh rAIOm.sh") / 256) > 1:
@@ -84,7 +84,7 @@ class Admin(commands.Cog):
         else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
           msg = await ctx.send(embed = em)
-          # msg = await ctx.fetch_message(msg.id)
+          msg = await ctx.fetch_message(msg.id)
           collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id, "message_id": msg}}, upsert=True)
 
     @die.error
