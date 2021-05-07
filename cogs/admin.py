@@ -1,11 +1,8 @@
 import discord
-import time, datetime
 from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-
-start_time=time.time()
 
 intents = discord.Intents.default()
 intents.members = True
@@ -22,6 +19,11 @@ class Admin(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
       print ('admin.py -> on_ready()')
+
+      msg = db["DieMessage"].find({"_id": 1})
+      for a in msg:
+        ch = self.client.get_channel(a["channel_id"])
+        await ch.send("I'm back!")
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -60,8 +62,9 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def die(self, ctx, *, message=None):
       em = discord.Embed(color = 0xadcca6)
-      # uptime=str(datetime.timedelta(seconds=int(round(time.time() - start_time))))
-      # em.add_field(name="uptime", value=uptime)
+
+      collection = db["DieMessage"]
+      collection.update_one({"_id": 1}, {"$set":{"channel_id": ctx.message.channel.id}}, upsert=True)
 
       if message == "pull":
         if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
