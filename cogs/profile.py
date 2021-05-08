@@ -100,15 +100,25 @@ class profile(commands.Cog):
     
 
     @commands.command(aliases=['p'])
-    async def profile(self, ctx):
-      check = db["Profile"].count_documents({"_id": ctx.message.author.id})
+    async def profile(self, ctx, *, target: discord.Member=None):
+      if target is None:
+        target = ctx.message.author.id
+      else:
+        try:
+          target = target.id
+        except:
+          pass
+
+
+      check = db["Profile"].count_documents({"_id": target})
       if check == 0:
-        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I couldn't find any profile linked to your account. Do `ax createprofile` to create one. Please join the [Support Server](https://discord.gg/2TCQtNs8kN) if you believe this is a mistake.")
+        if target is ctx.message.author.id:
+          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I couldn't find any profile linked to your account. Do `ax createprofile` to create one. Please join the [Support Server](https://discord.gg/2TCQtNs8kN) if you believe this is a mistake.")
 
         await ctx.send(embed=em)
         return
       
-      profile = db["Profile"].find({"_id": ctx.message.author.id})
+      profile = db["Profile"].find({"_id": target})
       for b in profile:
         age = b["age"]
         district = b["district"]
@@ -127,6 +137,13 @@ class profile(commands.Cog):
       em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
       em.set_thumbnail(url=looks)
       await ctx.send(embed=em)
+
+    @profile.error
+    async def profile_error(self, ctx, error):
+      if isinstance(error, commands.MemberNotFound):
+        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Couldn't find a Project Ax profile linked to that account.")
+
+        await ctx.send(embed=em)
     
     @commands.command(aliases=['delp', 'deletep'])
     @commands.is_owner()
