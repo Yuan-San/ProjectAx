@@ -127,8 +127,48 @@ class profile(commands.Cog):
       em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
       em.set_thumbnail(url=looks)
       await ctx.send(embed=em)
-
     
+    @commands.command(aliases=['delp', 'deletep'])
+    @commands.is_owner()
+    async def delprofile(self, ctx, *, id: int):
+
+      check = db["Profile"].count_documents({"_id": id})
+      if check != 0:
+        
+        profile = db["Profile"].find({"_id": id})
+        for b in profile:
+          first_name=b["first_name"]
+          last_name=b["last_name"]
+          xp = b["xp"]
+
+        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to delete this profile **({first_name} {last_name} - xp: `{xp}`**)? This action is irreversable.")
+        em.set_footer(text="Please type \"yes\" to confirm. Type anything else to cancel this command.")
+
+        await ctx.send(embed=em)
+
+        try: 
+          msg = await self.client.wait_for('message', timeout=30, check=lambda message:message.author == ctx.author and message.channel.id == ctx.channel.id)
+
+          if msg.content.lower() == "yes":
+            try:
+              db["Profile"].delete_one({"_id": id})
+              em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Succesfully deleted the profile.")
+
+              await ctx.send(embed=em)
+            except:
+              em=discord.Embed(color = 0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
+
+              await ctx.send(embed=em)
+
+          else:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
+            return
+
+        except asyncio.TimeoutError:
+          await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** You failed to reply in time."))
+
+      else:
+        await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Couldn't find any profile with that ID."))
 
 def setup(client):
     client.add_cog(profile(client))
