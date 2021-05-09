@@ -21,20 +21,21 @@ class ownerOnly(commands.Cog):
     async def on_ready(self):
       print ('owneronly.py -> on_ready()')
 
-      msg = db["DieMessage"].find({"_id": 1})
-      for a in msg:
-        channel = a["channel_id"]
-        user_name = a["user_name"]
-        user_discrim = a["user_discrim"]
-        time_on_die = a["time_on_die"]
+      if os.getenv('ISMAIN') is "True":
+        msg = db["DieMessage"].find({"_id": 1})
+        for a in msg:
+          channel = a["channel_id"]
+          user_name = a["user_name"]
+          user_discrim = a["user_discrim"]
+          time_on_die = a["time_on_die"]
 
-      time_now = datetime.now()
-      restart_time = (time_now - time_on_die).total_seconds()
+        time_now = datetime.now()
+        restart_time = (time_now - time_on_die).total_seconds()
 
-      em = discord.Embed(color=0xadcca6, description = (f"**{user_name}#{user_discrim}** It took me {round(restart_time, 2)} seconds to restart."))
+        em = discord.Embed(color=0xadcca6, description = (f"**{user_name}#{user_discrim}** It took me {round(restart_time, 2)} seconds to restart."))
 
-      ch = self.client.get_channel(channel)
-      await ch.send(embed=em)
+        ch = self.client.get_channel(channel)
+        await ch.send(embed=em)
 
     @commands.command()
     @commands.is_owner()
