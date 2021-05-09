@@ -58,7 +58,7 @@ class Help(commands.Cog):
 
     @help.command()
     async def prefix(self, ctx):
-      em = discord.Embed(title = "`prefix`", description = "Shows the bot's latency.", color = 0xadcca6)
+      em = discord.Embed(title = "`prefix`", description = f"Changes the bot's prefix. Do `ax prefix ax` or `ax prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "ManageGuild Permission", inline=False)
       em.add_field(name = "Usage", value = "`ax prefix`", inline=False)
 
@@ -78,13 +78,65 @@ class Help(commands.Cog):
 
       await ctx.send(embed = em)
     
-    # @help.command()
-    # async def prefix(self, ctx):
-    #   em = discord.Embed(title = "`prefix`", description = "Shows the bot's latency.", color = 0xadcca6)
-    #   em.add_field(name = "Permissions", value = "ManageGuild Permission", inline=False)
-    #   em.add_field(name = "Usage", value = "`ax prefix`", inline=False)
+    @help.command()
+    async def ping(self, ctx):
+      em = discord.Embed(title = "`prefix`", description = "Shows the bot's latency.", color = 0xadcca6)
+      em.add_field(name = "Usage", value = "`ax prefix`", inline=False)
 
-    #   await ctx.send(embed = em)
+      await ctx.send(embed = em)
+    
+    @help.command(aliases=['inv'])
+    async def invite(self, ctx):
+      em = discord.Embed(title = "`invite` / `inv`", description = "Invite Project Ax to your own server!", color = 0xadcca6)
+      em.add_field(name = "Usage", value = "`ax invite`\n`ax inv`", inline=False)
+
+      await ctx.send(embed = em)
+    
+    @help.command(aliases=['docs'])
+    async def readme(self, ctx):
+      em = discord.Embed(title = "`readme` / `docs`", description = "shows Project Ax's Docs", color = 0xadcca6)
+      em.add_field(name = "Usage", value = "`ax readme`\n`ax docs`", inline=False)
+
+      await ctx.send(embed = em)
+
+    @help.command(aliases=['repeat'])
+    async def say(self, ctx):
+      em = discord.Embed(title = "`say` / `repeat`", description = "Make the bot say something!", color = 0xadcca6)
+      em.add_field(name = "Permissions", value = "ManageGuild Permission", inline=False)
+      em.add_field(name = "Usage", value = "`ax say Hi, I'm super cool!`\n`ax repeat \"Project Ax is so cool..\"`", inline=False)
+
+      await ctx.send(embed = em)
+
+    @help.command()
+    async def stats(self, ctx):
+      em = discord.Embed(title = "`stats`", description = "Displays Project Ax's stats.", color = 0xadcca6)
+      em.add_field(name = "Usage", value = "`ax stats`", inline=False)
+
+      await ctx.send(embed = em)
+    
+    @help.command()
+    async def die(self, ctx):
+      em = discord.Embed(title = "`die`", description = "Kills and restarts the bot. Add a \"pull\" parameter to make it update by pulling from the [GitHub](https://github.com/Dok4440/ProjectAx).", color = 0xadcca6)
+      em.add_field(name = "Permissions", value = "Bot Owner", inline=False)
+      em.add_field(name = "Usage", value = "`ax die`\n`ax die pull`", inline=False)
+
+      await ctx.send(embed = em)
+
+    @help.command(aliases=['delp', 'deletep'])
+    async def delprofile(self, ctx):
+      em = discord.Embed(title = "`delprofile` / `delp`", description = "Deletes a Project Ax profile. This action is irreversable.", color = 0xadcca6)
+      em.add_field(name = "Permissions", value = "Bot Owner", inline=False)
+      em.add_field(name = "Usage", value = "`ax delprofile 387984284734062592`", inline=False)
+
+      await ctx.send(embed = em)
+  
+    @help.command(aliases=['editp', 'eprofile'])
+    async def editprofile(self, ctx):
+      em = discord.Embed(title = "`editprofile` / `editp`", description = "Edits a Project Ax profile. List of things you can change; `age`, `world`, `district`, `first_name`, `last_name`, `friend_id`, `gender`, `height`, `looks`, `xp`.", color = 0xadcca6)
+      em.add_field(name = "Permissions", value = "Bot Owner", inline=False)
+      em.add_field(name = "Usage", value = "`ax editprofile @Dok first_name \"Chad\"`\n`ax editp @JuicBblue age 69`", inline=False)
+
+      await ctx.send(embed = em)
 
 def setup(client):
     client.add_cog(Help(client))

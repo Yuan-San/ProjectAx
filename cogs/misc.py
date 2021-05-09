@@ -45,7 +45,7 @@ class Miscellaneous(commands.Cog):
         await ctx.send(embed = em)
 		
     # say
-    @commands.command(aliases=['repeat', 'speak'])
+    @commands.command(aliases=['repeat'])
     @commands.has_permissions(manage_guild=True)
     async def say(self, ctx, *, msg="Please provide text for me to say!"):
         await ctx.send(msg)
