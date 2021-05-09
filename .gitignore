@@ -1,4 +1,9 @@
+# ENV
 .env
 .env.example
 .env.local
 .env.staging
+
+# __pycache__
+cogs/__pycache__/
+StuffsWeNeed/__pycache__/
