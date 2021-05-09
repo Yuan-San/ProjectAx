@@ -21,7 +21,7 @@ class ownerOnly(commands.Cog):
     async def on_ready(self):
       print ('owneronly.py -> on_ready()')
 
-      if os.getenv('ISMAIN') is "True":
+      if os.getenv('ISMAIN') == "True":
         msg = db["DieMessage"].find({"_id": 1})
         for a in msg:
           channel = a["channel_id"]
