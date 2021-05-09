@@ -89,7 +89,7 @@ class profile(commands.Cog):
           em.set_thumbnail(url=looks)
           await ctx.send(embed=em)
 
-          collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": "Male", "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
+          collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": gender, "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
 
         else:
           await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
@@ -186,6 +186,32 @@ class profile(commands.Cog):
 
       else:
         await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Couldn't find any profile with that ID."))
+    
+    @commands.command(aliases=['eprofile', 'editp'])
+    @commands.is_owner()
+    async def editprofile(self, ctx, target: discord.Member, query: str, edit: str):
+      try:
+        target = target.id
+      except:
+        pass
+
+      profile = db["Profile"].find({"_id": target})
+      for b in profile:
+        to_edit=b[query]
+
+      try:
+        db["Profile"].update_one({"_id": target}, {"$set":{query: edit}}, upsert=True)
+      except:
+        em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
+        await ctx.send(embed=em)
+      
+      em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Updated the value \"{query}\" from `{to_edit}` to `{edit}` in document with \"_id\": `{target}`.")
+      await ctx.send(embed=em)
+    
+    @editprofile.error
+    async def editprofile_error(self, ctx, error):
+        em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
+        await ctx.send(embed=em)      
 
 def setup(client):
     client.add_cog(profile(client))
