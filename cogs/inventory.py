@@ -23,5 +23,9 @@ class inventory(commands.Cog):
     async def on_ready(self):
       print ('inventory -> on_ready()')
 
+    @commands.command(aliases=['inv'])
+    async def inventory(self, ctx):
+        collection = db["Inventory"]
+
 def setup(client):
     client.add_cog(inventory(client))
