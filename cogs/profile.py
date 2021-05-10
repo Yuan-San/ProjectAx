@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from StuffsWeNeed import defaultstuff
+from StuffsWeNeed import _db, defaultstuff
 import random
 
 intents = discord.Intents.default()
@@ -90,6 +90,13 @@ class profile(commands.Cog):
           await ctx.send(embed=em)
 
           collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": gender, "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
+          _db.create_inventory(ctx.message.author.id)
+
+          print()
+          print("----")
+          print(f"Created profile for user {user_name} - {ctx.message.author.id}")
+          print(f"Created inventory for profile. ({first_name} {last_name})")
+          print("----")
 
         else:
           await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
@@ -170,6 +177,16 @@ class profile(commands.Cog):
             try:
               db["Profile"].delete_one({"_id": id})
               em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Succesfully deleted the profile.")
+
+              _db.delete_inventory(id)
+
+              user_name=f"{ctx.author.name}#{ctx.author.discriminator}"
+
+              print()
+              print("----")
+              print(f"Deleted profile from user {user_name} - {ctx.message.author.id}")
+              print(f"Deleted inventory from profile ({first_name} {last_name})")
+              print("----")
 
               await ctx.send(embed=em)
             except:

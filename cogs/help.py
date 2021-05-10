@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from StuffsWeNeed import defaultstuff
+from StuffsWeNeed import _db
 
 intents = discord.Intents.default()
 intents.members = True
@@ -16,7 +16,7 @@ class Help(commands.Cog):
 
     @commands.group(invoke_without_command=True, aliases=['h'])
     async def help(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax")
 
@@ -28,7 +28,7 @@ class Help(commands.Cog):
     # list of modules;
     @help.command(aliases=['configuration'])
     async def config(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax Configuration")
       em.add_field(name="Commands", value=f"`{p}prefix`")
@@ -38,7 +38,7 @@ class Help(commands.Cog):
 
     @help.command()
     async def profiles(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax Profiles")
       em.add_field(name="Commands", value=f"`{p}createprofile` / `{p}cp`\n`{p}profile` / `{p}p`")
@@ -48,7 +48,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['misc'])
     async def miscellaneous(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax Miscellaneous")
       em.add_field(name="Commands", value=f"`{p}ping`\n`{p}invite`\n`{p}readme`\n`{p}say`\n`{p}stats`")
@@ -58,7 +58,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['botadmin', 'botadminonly', 'admin', 'bot', 'owneronly', 'adminonly'])
     async def admin_only(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax Admin Only")
       em.add_field(name="Commands", value=f"`{p}die`\n`{p}delprofile`\n`{p}editprofile`")
@@ -69,7 +69,7 @@ class Help(commands.Cog):
     # commands
     @help.command()
     async def prefix(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`prefix`", description = f"Changes the bot's prefix. Do `{p}prefix ax` or `{p}prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "ManageGuild Permission", inline=False)
@@ -79,7 +79,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['cprofile', 'createp', 'cp'])
     async def createprofile(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`createprofile` / `cp`", description = "Create a Project Ax profile!", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}createprofile`\n`{p}cp`\n`{p}cprofile`", inline=False)
@@ -88,7 +88,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['p'])
     async def profile(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`profile` / `p`", description = f"Shows your Project Ax profile. If you don't already have one, create a profile by doing `{p}createprofile`!", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}profile`\n`{p}p`", inline=False)
@@ -97,25 +97,25 @@ class Help(commands.Cog):
     
     @help.command()
     async def ping(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`prefix`", description = "Shows the bot's latency.", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}prefix`", inline=False)
 
       await ctx.send(embed = em)
     
-    @help.command(aliases=['inv'])
+    @help.command()
     async def invite(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
-      em = discord.Embed(title = "`invite` / `inv`", description = "Invite Project Ax to your own server!", color = 0xadcca6)
-      em.add_field(name = "Usage", value = f"`{p}invite`\n`{p}inv`", inline=False)
+      em = discord.Embed(title = "`invite`", description = "Invite Project Ax to your own server!", color = 0xadcca6)
+      em.add_field(name = "Usage", value = f"`{p}invite`", inline=False)
 
       await ctx.send(embed = em)
     
     @help.command(aliases=['docs'])
     async def readme(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`readme` / `docs`", description = "shows Project Ax's Docs", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}readme`\n`{p}docs`", inline=False)
@@ -124,7 +124,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['repeat'])
     async def say(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`say` / `repeat`", description = "Make the bot say something!", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "ManageGuild Permission", inline=False)
@@ -134,7 +134,7 @@ class Help(commands.Cog):
 
     @help.command()
     async def stats(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`stats`", description = "Displays Project Ax's stats.", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}stats`", inline=False)
@@ -143,7 +143,7 @@ class Help(commands.Cog):
     
     @help.command()
     async def die(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`die`", description = "Kills and restarts the bot. Add a \"pull\" parameter to make it update by pulling from the [GitHub](https://github.com/Dok4440/ProjectAx).", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "Bot Owner", inline=False)
@@ -153,7 +153,7 @@ class Help(commands.Cog):
 
     @help.command(aliases=['delp', 'deletep'])
     async def delprofile(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`delprofile` / `delp`", description = "Deletes a Project Ax profile. This action is irreversable.", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "Bot Owner", inline=False)
@@ -163,7 +163,7 @@ class Help(commands.Cog):
   
     @help.command(aliases=['editp', 'eprofile'])
     async def editprofile(self, ctx):
-      p = defaultstuff.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.guild.id)
 
       em = discord.Embed(title = "`editprofile` / `editp`", description = "Edits a Project Ax profile. List of things you can change; `age`, `world`, `district`, `first_name`, `last_name`, `friend_id`, `gender`, `height`, `looks`, `xp`.", color = 0xadcca6)
       em.add_field(name = "Permissions", value = "Bot Owner", inline=False)

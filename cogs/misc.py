@@ -31,7 +31,7 @@ class Miscellaneous(commands.Cog):
       await ctx.send(embed=em)
 
     # invite
-    @commands.command(aliases=['inv'])
+    @commands.command()
     async def invite(self, ctx):
       em = discord.Embed(description = "As the bot is still in BETA, you can't invite it to your server yet.", color = 0xadcca6)
 
