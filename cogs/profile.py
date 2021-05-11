@@ -248,15 +248,21 @@ class profile(commands.Cog):
           last_name=b["last_name"]
           xp = b["xp"]
 
-        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to delete this profile **({first_name} {last_name} - xp: `{xp}`**)? This action is irreversable.")
-        em.set_footer(text="Please type \"yes\" to confirm. Type anything else to cancel this command.")
+        def checkforR(reaction, msg):
+          return msg == ctx.message.author and reaction.emoji in ['✅', '🛑']
 
-        await ctx.send(embed=em)
+        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to delete this profile **({first_name} {last_name} - xp: `{xp}`**)? This action is irreversable.")
+        em.set_footer(text="Please react to this message to confirm.")
+
+        message_embed = await ctx.send(embed=em)
+
+        await message_embed.add_reaction(emoji='✅')
+        await message_embed.add_reaction(emoji='🛑')
 
         try: 
-          msg = await self.client.wait_for('message', timeout=30, check=lambda message:message.author == ctx.author and message.channel.id == ctx.channel.id)
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
-          if msg.content.lower() == "yes":
+          if reaction.emoji == '✅':
             try:
               db["Profile"].delete_one({"_id": id})
               em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Succesfully deleted the profile.")
@@ -271,7 +277,8 @@ class profile(commands.Cog):
               print(f"Deleted inventory from profile ({first_name} {last_name})")
               print("----")
 
-              await ctx.send(embed=em)
+              await message_embed.clear_reactions()
+              await message_embed.edit(embed=em)
             except:
               em=discord.Embed(color = 0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
 
