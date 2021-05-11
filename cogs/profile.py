@@ -166,7 +166,7 @@ class profile(commands.Cog):
           em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
           em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {user_name}", inline=False)
           em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
-          em.add_field(name="Level", value=f"Player Level: `0`\nPrimary Weapon: {main_weapon}\nSecondary Weapon: {secondary_weapon}", inline=False)
+          em.add_field(name="Level", value=f"Player Level: `0`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
           em.set_thumbnail(url=looks)
           fourth_embed = await first_embed.edit(embed=em)
 
