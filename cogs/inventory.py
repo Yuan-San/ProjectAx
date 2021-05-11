@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from StuffsWeNeed import defaultstuff
+from StuffsWeNeed import _db
 import random
 
 intents = discord.Intents.default()
@@ -25,7 +25,21 @@ class inventory(commands.Cog):
 
     @commands.command(aliases=['inv'])
     async def inventory(self, ctx):
-        collection = db["Inventory"]
+        main_weapon = _db.get_weapons(ctx.message.author.id)[0]
+        secondary_weapon = _db.get_weapons(ctx.message.author.id)[1]
+        main_weapon_xp = _db.get_weapons(ctx.message.author.id)[2]
+        secondary_weapon_xp = _db.get_weapons(ctx.message.author.id)[3]
+        main_weapon_e = _db.main_weapon_e_picker(main_weapon)
+        secondary_weapon_e = _db.secondary_weapon_e_picker(secondary_weapon)
+        balance = _db.get_balance(ctx.message.author.id)
+        p = _db.get_prefix(ctx.message.guild.id)
+
+        em=discord.Embed(color=0xadcca6, title=f"Inventory", description=f"Balance: {balance}")
+        em.add_field(name="Weapons", value=f"{main_weapon_e} {main_weapon} - xp: `{main_weapon_xp}`\n{secondary_weapon_e} {secondary_weapon} - xp: `{secondary_weapon_xp}`")
+        em.add_field(name="Items", value=f"Healing potion - `2`", inline=False)
+        em.set_footer(text=f"Do \"{p}inv <weapon/item>\" to see more info.")
+        await ctx.send(embed=em)
+        
 
 def setup(client):
     client.add_cog(inventory(client))
