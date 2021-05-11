@@ -43,14 +43,95 @@ class profile(commands.Cog):
         return
 
       em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to create your profile? **You can only do this once, and changing your profile is impossible.**")
-      em.set_footer(text="Please type \"yes\" to confirm. Type anything else to cancel this command.")
+      em.set_footer(text="Please react to this message to confirm.")
 
-      await ctx.send(embed=em)
+      first_embed = await ctx.send(embed=em)
+
+      await first_embed.add_reaction(emoji='✅')
+      await first_embed.add_reaction(emoji='🛑')
+
+      main_weapon = "nah"
+      secondary_weapon = "nah"
+
+      # weapon variables
+      longsword = self.client.get_emoji(841591365649170463)
+      katana = self.client.get_emoji(841591388055273472)
+      dagger = self.client.get_emoji(841591344308158516)
+      greatsword = self.client.get_emoji(841591317368799242)
+      sledgehammer = self.client.get_emoji(841591294115315753)
+      mace =  self.client.get_emoji(841591275567579156)
+      bow = self.client.get_emoji(841631789675053077)
+      longbow = self.client.get_emoji(841592788084326400)
+
+      def checkforR(reaction, msg):
+        return msg == ctx.message.author and reaction.emoji in ['✅', '🛑', longsword, katana, dagger, greatsword, sledgehammer, mace, bow, longbow]
 
       try: 
-        msg = await self.client.wait_for('message', timeout=30, check=lambda message:message.author == ctx.author and message.channel.id == ctx.channel.id)
 
-        if msg.content.lower() == "yes":
+        reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+
+        if reaction.emoji == '✅':
+
+          await first_embed.clear_reactions()
+
+          # main weapon
+          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Let's choose some weapons! First off, what do you want your **main weapon** to be? Note that only your first weapon will be free!")
+          second_embed = await first_embed.edit(embed=em)
+          
+          await first_embed.add_reaction(emoji=longsword)
+          await first_embed.add_reaction(emoji=katana)
+          await first_embed.add_reaction(emoji=dagger)
+          await first_embed.add_reaction(emoji=greatsword)
+          await first_embed.add_reaction(emoji=sledgehammer)
+          await first_embed.add_reaction(emoji=mace)
+          await first_embed.add_reaction(emoji='🛑')
+
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+
+          if reaction.emoji == longsword: main_weapon = "longsword"
+          elif reaction.emoji == katana: main_weapon = "katana"
+          elif reaction.emoji == dagger: main_weapon = "dagger"
+          elif reaction.emoji == greatsword: main_weapon = "greatsword"
+          elif reaction.emoji == sledgehammer: main_weapon = "sledgehammer"
+          elif reaction.emoji == mace: main_weapon = "mace"
+          else: 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled. {reaction.emoji}")) 
+            return
+
+          await first_embed.clear_reactions()
+
+          # secondary weapon
+          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** And what will your **secondary weapon** be? Note that only your first weapon will be free!")
+          third_embed = await first_embed.edit(embed=em)
+
+          await first_embed.add_reaction(emoji=bow)
+          await first_embed.add_reaction(emoji=longbow)
+          await first_embed.add_reaction(emoji='🛑')
+
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+
+          if reaction.emoji == bow: secondary_weapon = "bow"
+          elif reaction.emoji == longbow: secondary_weapon = "longbow"
+          elif reaction.emoji == '🛑':
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            return
+
+          await first_embed.clear_reactions()
+
+          # add both weapons to the database (inventory)
+          if main_weapon != "nah":
+            if secondary_weapon != "nah":
+              try: 
+                _db.create_inventory(ctx.message.author.id, main_weapon, secondary_weapon)
+              except:
+                await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
+                return
+            else:
+              await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
+              return
+          else:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
+            return
 
 
           MaleLooks = defaultstuff.profile()["MaleLooks"]
@@ -85,12 +166,11 @@ class profile(commands.Cog):
           em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
           em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {user_name}", inline=False)
           em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
-          em.add_field(name="Level", value="Player Level: `0`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
+          em.add_field(name="Level", value=f"Player Level: `0`\nPrimary Weapon: {main_weapon}\nSecondary Weapon: {secondary_weapon}", inline=False)
           em.set_thumbnail(url=looks)
-          await ctx.send(embed=em)
+          fourth_embed = await first_embed.edit(embed=em)
 
           collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": gender, "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
-          _db.create_inventory(ctx.message.author.id)
 
           print()
           print("----")
@@ -138,10 +218,13 @@ class profile(commands.Cog):
         world=b["world"]
         xp = b["xp"]
       
+      main_weapon = _db.get_weapons(ctx.message.author.id)[0]
+      secondary_weapon = _db.get_weapons(ctx.message.author.id)[1]
+      
       em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
       em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {friend_id}", inline=False)
       em.add_field(name="Region", value=f"World: {world}\nDistrict: {district}", inline=False)
-      em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `N/A`\nSecondary Weapon: `N/A`", inline=False)
+      em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
       em.set_thumbnail(url=looks)
       await ctx.send(embed=em)
 
