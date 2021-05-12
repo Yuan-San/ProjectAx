@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from StuffsWeNeed import _db, embeds
+from StuffsWeNeed import _db, embeds, defaultstuff
 import random
 
 intents = discord.Intents.default()
@@ -23,11 +23,12 @@ class inventory(commands.Cog):
     async def on_ready(self):
       print ('inventory -> on_ready()')
 
-    @commands.command(aliases=['inv'])
+
+    @commands.group(invoke_without_command=True, aliases=['inv'])
     async def inventory(self, ctx, *, target: discord.Member=None):
-        
+
         # find who's profile to pull up.
-        target = embeds.get_target(target, ctx.message.author.id)
+        target = defaultstuff.get_target(target, ctx.message.author.id)
 
         # inventory variables
         main_weapon = _db.get_weapons(target)[0]
@@ -41,10 +42,30 @@ class inventory(commands.Cog):
         healing_potion = _db.get_items(target)
 
         # create inventory embed
-        em = embeds.inventory_embed(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p)
+        em = embeds.show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p)
 
         await ctx.send(embed=em)
+    
+    # each item
+    @inventory.command(aliases=['healing', 'healingpotion'])
+    async def healing_potion(self, ctx, *, target: discord.Member=None):
 
+        # find who's profile to pull up.
+        target = defaultstuff.get_target(target, ctx.message.author.id)
+
+        # variables
+        item = "Healing Potion"
+        desc = "Item used for healing your character"
+        stats = "Heals `150` of your character's life points"
+        amountInv = _db.get_items(target)
+        amountV = 30
+        thumbnail = "https://static.wikia.nocookie.net/fortnite_gamepedia/images/d/d5/Shield_potion_icon.png/revision/latest?cb=20200727164706"
+        p = _db.get_prefix(ctx.message.guild.id)
+
+        # create embed
+        em = embeds.inventory_item(amountInv, amountV, desc, item, stats, p, thumbnail)
+
+        await ctx.send(embed=em)
 
 def setup(client):
     client.add_cog(inventory(client))
