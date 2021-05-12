@@ -47,8 +47,12 @@ class profile(commands.Cog):
 
       first_embed = await ctx.send(embed=em)
 
-      await first_embed.add_reaction(emoji='✅')
-      await first_embed.add_reaction(emoji='🛑')
+      try:
+        await first_embed.add_reaction(emoji='✅')
+        await first_embed.add_reaction(emoji='🛑')
+      except:
+        await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+        return
 
       main_weapon = "nah"
       secondary_weapon = "nah"
@@ -86,13 +90,17 @@ class profile(commands.Cog):
           em.set_footer(text="React to the corresponding emote to select that weapon.")
           second_embed = await first_embed.edit(embed=em)
           
-          await first_embed.add_reaction(emoji=longsword)
-          await first_embed.add_reaction(emoji=katana)
-          await first_embed.add_reaction(emoji=dagger)
-          await first_embed.add_reaction(emoji=greatsword)
-          await first_embed.add_reaction(emoji=sledgehammer)
-          await first_embed.add_reaction(emoji=mace)
-          await first_embed.add_reaction(emoji='🛑')
+          try: 
+            await first_embed.add_reaction(emoji=longsword)
+            await first_embed.add_reaction(emoji=katana)
+            await first_embed.add_reaction(emoji=dagger)
+            await first_embed.add_reaction(emoji=greatsword)
+            await first_embed.add_reaction(emoji=sledgehammer)
+            await first_embed.add_reaction(emoji=mace)
+            await first_embed.add_reaction(emoji='🛑')
+          except:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
 
@@ -110,8 +118,14 @@ class profile(commands.Cog):
 
           # confirmation
           second_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{main_weapon}** as your main weapon?"))
-          await first_embed.add_reaction(emoji='✅')
-          await first_embed.add_reaction(emoji='🛑')
+          
+          try:
+            await first_embed.add_reaction(emoji='✅')
+            await first_embed.add_reaction(emoji='🛑')
+          except:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            return
+
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
           if reaction.emoji == '🛑':
@@ -129,9 +143,13 @@ class profile(commands.Cog):
 
           third_embed = await first_embed.edit(embed=em)
 
-          await first_embed.add_reaction(emoji=bow)
-          await first_embed.add_reaction(emoji=longbow)
-          await first_embed.add_reaction(emoji='🛑')
+          try:
+            await first_embed.add_reaction(emoji=bow)
+            await first_embed.add_reaction(emoji=longbow)
+            await first_embed.add_reaction(emoji='🛑')
+          except:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
 
@@ -145,8 +163,14 @@ class profile(commands.Cog):
         
           # confirmation
           third_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{secondary_weapon}** as your secondary weapon?"))
-          await first_embed.add_reaction(emoji='✅')
-          await first_embed.add_reaction(emoji='🛑')
+          
+          try:
+            await first_embed.add_reaction(emoji='✅')
+            await first_embed.add_reaction(emoji='🛑')
+          except:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            return
+
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
           if reaction.emoji == '🛑':
@@ -289,8 +313,12 @@ class profile(commands.Cog):
 
         message_embed = await ctx.send(embed=em)
 
-        await message_embed.add_reaction(emoji='✅')
-        await message_embed.add_reaction(emoji='🛑')
+        try:
+          await message_embed.add_reaction(emoji='✅')
+          await message_embed.add_reaction(emoji='🛑')
+        except:
+          await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+          return
 
         try: 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
