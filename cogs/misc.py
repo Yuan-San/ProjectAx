@@ -4,6 +4,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from StuffsWeNeed import defaultstuff
 
 start_time=time.time()
 
@@ -56,7 +57,7 @@ class Miscellaneous(commands.Cog):
     async def stats(self, ctx):
         em = discord.Embed(color = 0xadcca6)
         
-        v=str(os.getenv('VERSION'))
+        v=defaultstuff.get_version()
         
         em.set_author(name=f"Project Ax {v}", icon_url = "https://images-ext-2.discordapp.net/external/JpvcRi_vZuUxHv57rebrT8Bm1qGKmQmgSGq3PqEUO_o/https/media.discordapp.net/attachments/803967265338032140/805094438807666768/pixil-frame-0_6.png")
         em.add_field(name="Team", value="Axie#3706\nDok#4440\nJuicyBblue#5335")
@@ -67,6 +68,11 @@ class Miscellaneous(commands.Cog):
         em.add_field(name="server count", value = f"{str(len(self.client.guilds))}")
 
         await ctx.send(embed = em)    
+    
+    @commands.command(aliases=['v'])
+    async def version(self, ctx):
+      em = discord.Embed(color = 0xadcca6, description=f"`{defaultstuff.get_version()}`", title="Project Ax Version")
+      await ctx.send(embed=em)
 
 # this is the end of the code, type all mod commands above this
 def setup(client):

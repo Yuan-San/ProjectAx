@@ -2,6 +2,10 @@ import json
 from dotenv import load_dotenv
 import os
 
+def get_version():
+    v="v1.0.1-a"
+    return v 
+
 def config(filename: str = "config"):
     try:
         with open(f"StuffsWeNeed/jsons/{filename}.json", encoding='utf8') as data:
