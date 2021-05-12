@@ -103,7 +103,7 @@ class profile(commands.Cog):
           elif reaction.emoji == sledgehammer: main_weapon = "sledgehammer"
           elif reaction.emoji == mace: main_weapon = "mace"
           else: 
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled. {reaction.emoji}")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
             return
 
           await first_embed.clear_reactions()
