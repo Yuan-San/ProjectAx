@@ -75,7 +75,15 @@ class profile(commands.Cog):
           await first_embed.clear_reactions()
 
           # main weapon
-          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Let's choose some weapons! First off, what do you want your **main weapon** to be? Note that only your first weapon will be free!")
+          em = discord.Embed(color=0xadcca6)
+          em.set_author(name=f"{ctx.author.name}#{ctx.author.discriminator} Let's choose some weapons! First off, what do you want your main weapon to be? Note that only your first weapon will be free!")
+          em.add_field(name=f"{longsword} Longsword {longsword}", value=_db.get_weapon_stats_list("longsword"))
+          em.add_field(name=f"{katana} Katana {katana}", value=_db.get_weapon_stats_list("katana"))
+          em.add_field(name=f"{dagger} Dagger {dagger}", value=_db.get_weapon_stats_list("dagger"))
+          em.add_field(name=f"{greatsword} Greatsword {greatsword}", value=_db.get_weapon_stats_list("greatsword"))
+          em.add_field(name=f"{sledgehammer} Slegdehammer {sledgehammer}", value=_db.get_weapon_stats_list("sledgehammer"))
+          em.add_field(name=f"{mace} Mace {mace}", value=_db.get_weapon_stats_list("mace"))
+          em.set_footer(text="React to the corresponding emote to select that weapon.")
           second_embed = await first_embed.edit(embed=em)
           
           await first_embed.add_reaction(emoji=longsword)
@@ -86,7 +94,7 @@ class profile(commands.Cog):
           await first_embed.add_reaction(emoji=mace)
           await first_embed.add_reaction(emoji='🛑')
 
-          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
 
           if reaction.emoji == longsword: main_weapon = "longsword"
           elif reaction.emoji == katana: main_weapon = "katana"
@@ -100,15 +108,32 @@ class profile(commands.Cog):
 
           await first_embed.clear_reactions()
 
+          # confirmation
+          second_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{main_weapon}** as your main weapon?"))
+          await first_embed.add_reaction(emoji='✅')
+          await first_embed.add_reaction(emoji='🛑')
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+
+          if reaction.emoji == '🛑':
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            return
+
+          await first_embed.clear_reactions()
+
           # secondary weapon
-          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** And what will your **secondary weapon** be? Note that only your first weapon will be free!")
+          em = discord.Embed(color=0xadcca6)
+          em.set_author(name=f"{ctx.author.name}#{ctx.author.discriminator} And what will your secondary weapon be? Note that only your first weapon will be free!")
+          em.add_field(name=f"{bow} Bow {bow}", value=_db.get_weapon_stats_list("bow"))
+          em.add_field(name=f"{longbow} Longbow {longbow}", value=_db.get_weapon_stats_list("longbow"))
+          em.set_footer(text="React to the corresponding emote to select that weapon.")
+
           third_embed = await first_embed.edit(embed=em)
 
           await first_embed.add_reaction(emoji=bow)
           await first_embed.add_reaction(emoji=longbow)
           await first_embed.add_reaction(emoji='🛑')
 
-          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
 
           if reaction.emoji == bow: secondary_weapon = "bow"
           elif reaction.emoji == longbow: secondary_weapon = "longbow"
@@ -116,6 +141,18 @@ class profile(commands.Cog):
             await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
             return
 
+          await first_embed.clear_reactions()
+        
+          # confirmation
+          third_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{secondary_weapon}** as your secondary weapon?"))
+          await first_embed.add_reaction(emoji='✅')
+          await first_embed.add_reaction(emoji='🛑')
+          reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
+
+          if reaction.emoji == '🛑':
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            return
+          
           await first_embed.clear_reactions()
 
           # add both weapons to the database (inventory)
@@ -188,13 +225,9 @@ class profile(commands.Cog):
 
     @commands.command(aliases=['p'])
     async def profile(self, ctx, *, target: discord.Member=None):
-      if target is None:
-        target = ctx.message.author.id
-      else:
-        try:
-          target = target.id
-        except:
-          pass
+      
+      # find who's profile to pull up.
+      target = defaultstuff.get_target(target, ctx.message.author.id)
 
 
       check = db["Profile"].count_documents({"_id": target})
@@ -319,6 +352,20 @@ class profile(commands.Cog):
     async def editprofile_error(self, ctx, error):
         em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
         await ctx.send(embed=em)      
+      
+    @commands.command()
+    @commands.is_owner()
+    async def insert_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
+      collection = db["WeaponStats"]
+      collection.insert_one({"_id": weapon, "damage": damage, "accuracy": accuracy, "defence": defence, "speed": speed})
+      await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Added weapon ({weapon}) to the database.\nDamaga: {damage}\nAccuracy: {accuracy}\nDefence: {defence}\nSpeed: {speed}"))
+    
+    @commands.command()
+    @commands.is_owner()
+    async def update_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
+      collection = db["WeaponStats"]
+      collection.update_one({"_id": weapon}, {"$set":{"damage": damage, "accuracy": accuracy, "defence": defence, "speed": speed}})
+      await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Updated weapon ({weapon}) database.\nDamaga: {damage}\nAccuracy: {accuracy}\nDefence: {defence}\nSpeed: {speed}"))
 
 def setup(client):
     client.add_cog(profile(client))

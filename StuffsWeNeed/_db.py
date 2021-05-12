@@ -2,6 +2,7 @@ import json
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
+import discord
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -17,6 +18,7 @@ def create_inventory(id, main_weapon, secondary_weapon):
     
 def delete_inventory(id):
     db["Inventory"].delete_one({"_id": id})
+
 
 def get_weapons(id):
     for b in db["Inventory"].find({"_id": id}):
@@ -57,3 +59,17 @@ def get_items(id):
             healing_potion = 0
     
     return (healing_potion)
+
+def get_weapon_stats(weapon, stat):
+    for b in db["WeaponStats"].find({"_id": weapon}): 
+        stats = b[stat]
+    return stats
+
+def get_weapon_stats_list(weapon):
+    damage="damage"
+    accuracy="accuracy"
+    defence="defence"
+    speed="speed"
+
+    list = f"Damage: {get_weapon_stats(weapon, damage)}\nAccuracy: {get_weapon_stats(weapon, accuracy)}%\nDefence: {get_weapon_stats(weapon, defence)}%\nSpeed: {get_weapon_stats(weapon, speed)}00ms"
+    return list

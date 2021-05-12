@@ -24,3 +24,10 @@ def texts(filename: str = "texts"):
             return json.load(data)
     except FileNotFoundError:
         raise FileNotFoundError("texts.json wasn't found")
+
+def get_target(target, id):
+    if target is None: target = id
+    else:
+        try: target = target.id
+        except: pass
+    return target
