@@ -12,7 +12,7 @@ class Help(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('Help module is ready.')
+      print ('help.py -> on_ready()')
 
     @commands.group(invoke_without_command=True, aliases=['h'])
     async def help(self, ctx):

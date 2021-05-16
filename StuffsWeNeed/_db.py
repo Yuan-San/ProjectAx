@@ -70,15 +70,6 @@ def get_item(id, item, guild_id, mainCommand):
         p = get_prefix(guild_id)
         return f"You don't have a profile yet. Create one: `{p}createprofile`"
 
-# def get_item_2(id, item):
-#     for b in db["Inventory"].find({"_id": id}):
-#         try:
-#             x = b[item]
-#         except:
-#             x = 0
-#     return x
-
-
 def get_weapon_stats(weapon, stat):
     for b in db["WeaponStats"].find({"_id": weapon}): 
         stats = b[stat]

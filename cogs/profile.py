@@ -256,8 +256,7 @@ class profile(commands.Cog):
 
       check = db["Profile"].count_documents({"_id": target})
       if check == 0:
-        if target is ctx.message.author.id:
-          em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I couldn't find any profile linked to your account. Do `ax createprofile` to create one. Please join the [Support Server](https://discord.gg/2TCQtNs8kN) if you believe this is a mistake.")
+        em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I couldn't find any profile linked to your account. Do `ax createprofile` to create one. Please join the [Support Server](https://discord.gg/2TCQtNs8kN) if you believe this is a mistake.")
 
         await ctx.send(embed=em)
         return
