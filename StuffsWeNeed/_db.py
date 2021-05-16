@@ -51,14 +51,33 @@ def get_balance(id):
     
     return balance
 
-def get_items(id):
+def get_items_precheck(id, item, mainCommand):
     for b in db["Inventory"].find({"_id": id}):
         try:
-            healing_potion = b["healing_potion"]
+            x = b[item]
         except:
-            healing_potion = 0
-    
-    return (healing_potion)
+            x = 0
+    if mainCommand == "nm":
+        return f"Inventory: `{x}`\nVault: `N/A`"
+    elif mainCommand == "m":
+        return x
+
+def get_item(id, item, guild_id, mainCommand):
+    check = db["Inventory"].count_documents({"_id": id})
+    if check != 0:
+        return get_items_precheck(id, item, mainCommand)
+    else:
+        p = get_prefix(guild_id)
+        return f"You don't have a profile yet. Create one: `{p}createprofile`"
+
+# def get_item_2(id, item):
+#     for b in db["Inventory"].find({"_id": id}):
+#         try:
+#             x = b[item]
+#         except:
+#             x = 0
+#     return x
+
 
 def get_weapon_stats(weapon, stat):
     for b in db["WeaponStats"].find({"_id": weapon}): 

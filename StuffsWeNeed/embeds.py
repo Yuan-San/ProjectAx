@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 import discord
+from StuffsWeNeed import _db
 
 intents = discord.Intents.default()
 intents.members = True
@@ -20,10 +21,10 @@ def show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weap
 
     return em
 
-def inventory_item(amountInv, amountV, desc, item, stats, p, thumbnail):
+def inventory_item(amount, desc, item, stats, p, thumbnail):
     em=discord.Embed(color=0xadcca6, title=f"Inventory - {item}", description=desc)
-    em.add_field(name="Stats", value=f"{stats}", inline=False)
-    em.add_field(name="Amount", value=f"Inventory: `{amountInv}`\nVault: `{amountV}`", inline=False)
+    em.add_field(name="Stats", value=stats, inline=False)
+    em.add_field(name="Amount", value=amount, inline=False)
     em.set_thumbnail(url=thumbnail)
     em.set_footer(text=f"Do \"{p}inventory\" to see your all your items.")
 

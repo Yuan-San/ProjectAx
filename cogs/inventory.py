@@ -30,6 +30,13 @@ class inventory(commands.Cog):
         # find who's profile to pull up.
         target = defaultstuff.get_target(target, ctx.message.author.id)
 
+        # check if the user's profile actually exists
+        check = db["Inventory"].count_documents({"_id": target})
+        if check == 0:
+            em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I couldn't find any profile linked to your account. Do `ax createprofile` to create one. Please join the [Support Server](https://discord.gg/2TCQtNs8kN) if you believe this is a mistake.")
+            await ctx.send(embed=em)
+            return
+
         # inventory variables
         main_weapon = _db.get_weapons(target)[0]
         secondary_weapon = _db.get_weapons(target)[1]
@@ -39,7 +46,7 @@ class inventory(commands.Cog):
         secondary_weapon_e = _db.secondary_weapon_e_picker(secondary_weapon)
         balance = _db.get_balance(target)
         p = _db.get_prefix(ctx.message.guild.id)
-        healing_potion = _db.get_items(target)
+        healing_potion = _db.get_item(target, "healing_potion", ctx.message.guild.id,"m")
 
         # create inventory embed
         em = embeds.show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p)
@@ -57,13 +64,12 @@ class inventory(commands.Cog):
         item = "Healing Potion"
         desc = "Item used for healing your character"
         stats = "Heals `150` of your character's life points"
-        amountInv = _db.get_items(target)
-        amountV = 30
-        thumbnail = "https://static.wikia.nocookie.net/fortnite_gamepedia/images/d/d5/Shield_potion_icon.png/revision/latest?cb=20200727164706"
+        amount = _db.get_item(target, "healing_potion", ctx.message.guild.id, "nm")
+        thumbnail = "https://media.discordapp.net/attachments/804705780557021214/842031340521783316/pixil-frame-0_6.png"
         p = _db.get_prefix(ctx.message.guild.id)
 
         # create embed
-        em = embeds.inventory_item(amountInv, amountV, desc, item, stats, p, thumbnail)
+        em = embeds.inventory_item(amount, desc, item, stats, p, thumbnail)
 
         await ctx.send(embed=em)
 
