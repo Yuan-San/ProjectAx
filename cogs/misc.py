@@ -71,7 +71,7 @@ class Miscellaneous(commands.Cog):
     
     @commands.command(aliases=['v'])
     async def version(self, ctx):
-      em = discord.Embed(color = 0xadcca6, description=f"`{defaultstuff.get_version()}`", title="Project Ax Version")
+      em = discord.Embed(color = 0xadcca6, description=f"{defaultstuff.get_version()}")
       await ctx.send(embed=em)
 
 # this is the end of the code, type all mod commands above this
