@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import asyncio
 from StuffsWeNeed import _db, defaultstuff, embeds, combat
 import random
+import asyncio
 
 intents = discord.Intents.default()
 intents.members = True
@@ -57,13 +58,16 @@ class training(commands.Cog):
         elif reaction.emoji == '🛑':
             await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
             return
+        
+        await message.clear_reactions()
+        await message.edit(embed=discord.Embed(color=0xadcca6, description="wait."))
 
         # dummy's stats
         d_dmg = 0
         d_acc = 0
         d_def = 0
         d_spd = 20
-        d_hp = 10000
+        d_hp = 500
 
         # player's stats
         p_dmg = combat.get_player_stats(weapon)[0]
@@ -73,8 +77,25 @@ class training(commands.Cog):
         p_hp = 1000
 
         # the fight
+        while d_hp > 0 and p_hp > 0:
+            
+            # player move
+            d_hp = combat.attack(p_dmg, p_acc, d_def, d_hp)
+            print("dummy hp after player move:", d_hp)
+            
+            await asyncio.sleep(1)
 
+            # dummy move
+            p_hp = combat.attack(d_dmg, d_acc, p_def, p_hp)
+            print("player hp after dummy move:", p_hp)
         
+        # results
+        winner = combat.winner(p_hp, d_hp)
+        if winner == "Enemy": winner = "Training Dummy"
+
+        em = discord.Embed(color=0xadcca6, description=f"The winner of the fight is **{winner}**!!")
+        em.set_footer(text="ik you didn't see any actual combat, stfu.")
+        await message.edit(embed=em)
 
 
 def setup(client):
