@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import os
 import discord
 import random
+import asyncio
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -54,10 +55,18 @@ def attack(dmg, acc, e_defense, e_hp):
     else:
         return 0.0
 
+def hit_or_miss(e_hp, prHP, moves):
+    if moves == 0:
+        return ""
+    elif e_hp == prHP:
+        return "- Miss!"
+    else:
+        return "- Hit!"
+
 def winner(youHP, enemyHP):
     if youHP == 0.0:
         return "Enemy"
     elif enemyHP == 0.0:
-        return "You"
+        return "you"
     else:
         return "?"

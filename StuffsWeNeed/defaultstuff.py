@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 
 def get_version():
-    v="v1.1.0-a"
+    v="v1.2.0-a"
     return v 
 
 def config(filename: str = "config"):

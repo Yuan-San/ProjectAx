@@ -13,6 +13,7 @@ load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
+
 def show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p):
     em=discord.Embed(color=0xadcca6, title=f"Inventory", description=f"Balance: {balance}")
     em.add_field(name="Weapons", value=f"{main_weapon_e} {main_weapon} - xp: `{main_weapon_xp}`\n{secondary_weapon_e} {secondary_weapon} - xp: `{secondary_weapon_xp}`")
@@ -27,5 +28,24 @@ def inventory_item(amount, desc, item, stats, p, thumbnail):
     em.add_field(name="Amount", value=amount, inline=False)
     em.set_thumbnail(url=thumbnail)
     em.set_footer(text=f"Do \"{p}inventory\" to see your all your items.")
+
+    return em
+
+def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss):
+    em=discord.Embed(color=0xadcca6)
+    em.set_author(name=title)
+    em.add_field(name=f"You {hit_or_miss}", value=f"hp: {int(p_hp)}", inline=False)
+    em.add_field(name=enemy, value=f"hp: {int(e_hp)}", inline=False)
+    em.set_thumbnail(url=thumbnail)
+
+    return em
+
+def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
+    em=discord.Embed(color=0xadcca6, title=f"The winner of the fight is **{winner}**!!")
+    em.set_author(name=title)
+    em.add_field(name="You", value=f"Hp: {int(p_hp)}")
+    em.add_field(name=enemy, value=f"Hp: {int(e_hp)}")
+    em.set_thumbnail(url=thumbnail)
+    em.title=f"The winner of the fight is **{winner}**!!"
 
     return em

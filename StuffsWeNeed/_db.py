@@ -83,3 +83,9 @@ def get_weapon_stats_list(weapon):
 
     list = f"Damage: {get_weapon_stats(weapon, damage)}\nAccuracy: {get_weapon_stats(weapon, accuracy)}%\nDefence: {get_weapon_stats(weapon, defence)}%\nSpeed: {get_weapon_stats(weapon, speed)}00ms"
     return list
+
+def get_profile_looks(id):
+    for b in db["Profile"].find({"_id": id}):
+        looks = b["looks"]
+
+    return looks

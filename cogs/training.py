@@ -8,6 +8,7 @@ import asyncio
 from StuffsWeNeed import _db, defaultstuff, embeds, combat
 import random
 import asyncio
+from threading import Thread
 
 intents = discord.Intents.default()
 intents.members = True
@@ -60,7 +61,10 @@ class training(commands.Cog):
             return
         
         await message.clear_reactions()
-        await message.edit(embed=discord.Embed(color=0xadcca6, description="wait."))
+
+        thumbnail = "https://media.discordapp.net/attachments/804705780557021214/843115592319107113/pixil-frame-0_45.png"
+        title = "Training Mode"
+        enemy = "Training Dummy"
 
         # dummy's stats
         d_dmg = 0
@@ -74,28 +78,37 @@ class training(commands.Cog):
         p_acc = combat.get_player_stats(weapon)[1]
         p_def = combat.get_player_stats(weapon)[2]
         p_spd = combat.get_player_stats(weapon)[3]
-        p_hp = 1000
+        p_hp = 500
+
+        prHP = d_hp
+        moves = 0
 
         # the fight
         while d_hp > 0 and p_hp > 0:
             
+            HorM = combat.hit_or_miss(d_hp, prHP, moves)
+            prHP = d_hp
+
+            await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM))
+
             # player move
             d_hp = combat.attack(p_dmg, p_acc, d_def, d_hp)
-            print("dummy hp after player move:", d_hp)
+            moves += 1
             
+            # turn based for now.
             await asyncio.sleep(1)
 
             # dummy move
             p_hp = combat.attack(d_dmg, d_acc, p_def, p_hp)
-            print("player hp after dummy move:", p_hp)
+            moves += 1
         
         # results
         winner = combat.winner(p_hp, d_hp)
         if winner == "Enemy": winner = "Training Dummy"
+        else:
+            thumbnail = _db.get_profile_looks(ctx.message.author.id)
 
-        em = discord.Embed(color=0xadcca6, description=f"The winner of the fight is **{winner}**!!")
-        em.set_footer(text="ik you didn't see any actual combat, stfu.")
-        await message.edit(embed=em)
+        await message.edit(embed=embeds.pve_combat_embed_winner(p_hp, d_hp, thumbnail, title, enemy, winner))
 
 
 def setup(client):
