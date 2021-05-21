@@ -2,7 +2,7 @@
 from discord.ext import commands
 from StuffsWeNeed import defaultstuff
 
-owners = defaultstuff.config()["owners"]
+owners = defaultstuff.get_config()["owners"]
 
 def is_owner(ctx):
   return ctx.author.id in owners

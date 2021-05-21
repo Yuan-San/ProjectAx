@@ -195,11 +195,11 @@ class profile(commands.Cog):
             return
 
 
-          MaleLooks = defaultstuff.profile()["MaleLooks"]
-          FemaleLooks = defaultstuff.profile()["FemaleLooks"]
-          CharacterLastName = defaultstuff.profile()["CharacterLastName"]
-          CharacterFirstNameMale = defaultstuff.profile()["CharacterFirstNameMale"]
-          CharacterFirstNameFemale = defaultstuff.profile()["CharacterFirstNameFemale"]
+          MaleLooks = defaultstuff.get_profile()["MaleLooks"]
+          FemaleLooks = defaultstuff.get_profile()["FemaleLooks"]
+          CharacterLastName = defaultstuff.get_profile()["CharacterLastName"]
+          CharacterFirstNameMale = defaultstuff.get_profile()["CharacterFirstNameMale"]
+          CharacterFirstNameFemale = defaultstuff.get_profile()["CharacterFirstNameFemale"]
 
           maleFemaleRatio = [1, 2]
           female_height = ["4'7", "4'8", "4'9", "4'10", "4'11", "5'", "5'1", "5'2", "5'3", "5'4", "5'5", "5'6", "5'7", "5'8"]

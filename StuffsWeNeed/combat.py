@@ -63,6 +63,13 @@ def hit_or_miss(e_hp, prHP, moves):
     else:
         return "- Hit!"
 
+async def pve(spd, dmg, acc, df, hp):
+    a = 1
+    spd = float(spd/10)
+    while a==1:
+        attack(dmg, acc, df, hp)
+        await asyncio.sleep(spd)
+
 def winner(youHP, enemyHP):
     if youHP == 0.0:
         return "Enemy"

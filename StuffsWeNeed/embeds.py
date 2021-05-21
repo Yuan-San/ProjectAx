@@ -1,6 +1,6 @@
 import json
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from pymongo import DESCENDING, MongoClient
 import os
 import discord
 from StuffsWeNeed import _db
@@ -26,6 +26,19 @@ def inventory_item(amount, desc, item, stats, p, thumbnail):
     em=discord.Embed(color=0xadcca6, title=f"Inventory - {item}", description=desc)
     em.add_field(name="Stats", value=stats, inline=False)
     em.add_field(name="Amount", value=amount, inline=False)
+    em.set_thumbnail(url=thumbnail)
+    em.set_footer(text=f"Do \"{p}inventory\" to see your all your items.")
+
+    return em
+
+def inventory_weapon(weapon, desc, thumbnail, p):
+    dmg = _db.get_weapon_stats(weapon, "damage")
+    acc = _db.get_weapon_stats(weapon, "accuracy")
+    spd = _db.get_weapon_stats(weapon, "speed")
+    df = _db.get_weapon_stats(weapon, "defence")
+
+    em=discord.Embed(color=0xadcca6, title=f"Weapon - {weapon}", description=desc)
+    em.add_field(name="Stats", value=f"Damage: {dmg}\nAccuracy: {acc}\nSpeed: {spd}\nDefense: {df}")
     em.set_thumbnail(url=thumbnail)
     em.set_footer(text=f"Do \"{p}inventory\" to see your all your items.")
 

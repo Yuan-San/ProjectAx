@@ -24,7 +24,7 @@ class inventory(commands.Cog):
       print ('inventory -> on_ready()')
 
 
-    @commands.group(invoke_without_command=True, aliases=['inv'])
+    @commands.group(invoke_without_command=True, aliases=['inv', 'info'])
     async def inventory(self, ctx, *, target: discord.Member=None):
 
         # find who's profile to pull up.
@@ -72,6 +72,17 @@ class inventory(commands.Cog):
         em = embeds.inventory_item(amount, desc, item, stats, p, thumbnail)
 
         await ctx.send(embed=em)
+    
+    # weapon info
+    @inventory.command(aliases=['wpn'])
+    async def weapon(self, ctx, *, weapon):
+
+        # variables
+        desc = "weapon desc"
+        thumbnail = "https://media.discordapp.net/attachments/804705780557021214/845013813605695549/pixil-frame-0_49.png"
+        p = _db.get_prefix(ctx.message.guild.id)
+
+        await ctx.send(embed=embeds.inventory_weapon(weapon.lower(), desc, thumbnail, p))
 
 def setup(client):
     client.add_cog(inventory(client))
