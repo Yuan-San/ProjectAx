@@ -1,5 +1,5 @@
 def get_version():
-    v="v1.2.3-a"
+    v="v1.2.4-a"
     return v 
 
 def get_target(target, id):

@@ -76,7 +76,7 @@ class inventory(commands.Cog):
     async def weapon(self, ctx, *, weapon):
 
         # variables
-        desc = "Project Ax - v1 Weapon\nStage 1"
+        desc = "Project Ax - v1 Weapon (stage 1)"
         thumbnail = _json.get_art()[weapon.lower()]
         p = _db.get_prefix(ctx.message.guild.id)
 
