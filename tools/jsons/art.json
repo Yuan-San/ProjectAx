@@ -22,7 +22,12 @@
   "tool_fishing_rod": "https://i.imgur.com/59Ii8TC.png",
   "tool_scissors": "https://i.imgur.com/HDuyIPV.png",
   
-  "bot_icon_great_sword": "https://i.imgur.com/Tm1RAGs.png",
-  "bot_icon_long_sword": "https://i.imgur.com/tXbzgZD.png",
-  "bot_icon_long_bow": "https://i.imgur.com/C3rOUew.png"
+  "bot_icon_greatsword": "https://i.imgur.com/Tm1RAGs.png",
+  "bot_icon_longsword": "https://i.imgur.com/tXbzgZD.png",
+  "bot_icon_longbow": "https://i.imgur.com/C3rOUew.png",
+  
+  "bot_icon_greatsword_small": "",
+  "bot_icon_longsword_small": "",
+  "bot_icon_longbow_small": ""
+  
 }
