@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from StuffsWeNeed import _db
+from tools import _db
 
 intents = discord.Intents.default()
 intents.members = True

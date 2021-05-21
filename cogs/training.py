@@ -5,10 +5,8 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from StuffsWeNeed import _db, defaultstuff, embeds, combat
-import random
+from tools import _db, embeds, combat
 import asyncio
-from threading import Thread
 
 intents = discord.Intents.default()
 intents.members = True

@@ -1,9 +1,8 @@
-import json
 from dotenv import load_dotenv
-from pymongo import DESCENDING, MongoClient
+from pymongo import MongoClient
 import os
 import discord
-from StuffsWeNeed import _db
+from tools import _db
 
 intents = discord.Intents.default()
 intents.members = True
@@ -62,3 +61,12 @@ def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
     em.title=f"The winner of the fight is **{winner}**!!"
 
     return em
+
+
+
+# errors
+def error_1(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Something went wrong.")
+
+    return em
+

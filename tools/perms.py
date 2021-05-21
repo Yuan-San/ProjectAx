@@ -1,8 +1,8 @@
 # all stuff needed to define permissions
 from discord.ext import commands
-from StuffsWeNeed import defaultstuff
+from tools import _json
 
-owners = defaultstuff.get_config()["owners"]
+owners = _json.get_config()["owners"]
 
 def is_owner(ctx):
   return ctx.author.id in owners

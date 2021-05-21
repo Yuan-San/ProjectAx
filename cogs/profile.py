@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from StuffsWeNeed import _db, defaultstuff
+from tools import _db, _json, tools, embeds
 import random
 
 intents = discord.Intents.default()
@@ -53,9 +53,6 @@ class profile(commands.Cog):
       except:
         await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
         return
-
-      main_weapon = "nah"
-      secondary_weapon = "nah"
 
       # weapon variables
       longsword = self.client.get_emoji(841591365649170463)
@@ -141,7 +138,7 @@ class profile(commands.Cog):
           em.add_field(name=f"{longbow} Longbow {longbow}", value=_db.get_weapon_stats_list("longbow"))
           em.set_footer(text="React to the corresponding emote to select that weapon.")
 
-          third_embed = await first_embed.edit(embed=em)
+          await first_embed.edit(embed=em)
 
           try:
             await first_embed.add_reaction(emoji=bow)
@@ -162,7 +159,7 @@ class profile(commands.Cog):
           await first_embed.clear_reactions()
         
           # confirmation
-          third_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{secondary_weapon}** as your secondary weapon?"))
+          await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{secondary_weapon}** as your secondary weapon?"))
           
           try:
             await first_embed.add_reaction(emoji='✅')
@@ -179,27 +176,31 @@ class profile(commands.Cog):
           
           await first_embed.clear_reactions()
 
+
+
+          # check if the weapons are actually registered
+          if main_weapon == None or secondary_weapon == None:
+
+            em=embeds.error_1(ctx.author.name, ctx.author.discriminator)
+            em.set_footer("main_weapon == None or secondary_weapon == None")
+
+            await ctx.send(embed=em)
+            return
+          
           # add both weapons to the database (inventory)
-          if main_weapon != "nah":
-            if secondary_weapon != "nah":
-              try: 
-                _db.create_inventory(ctx.message.author.id, main_weapon, secondary_weapon)
-              except:
-                await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
-                return
-            else:
-              await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
-              return
-          else:
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong."))
+          try: 
+            _db.create_inventory(ctx.message.author.id, main_weapon, secondary_weapon)
+          except:
+            await ctx.send(embed=embeds.error_1(ctx.author.name, ctx.author.discriminator))
             return
 
 
-          MaleLooks = defaultstuff.get_profile()["MaleLooks"]
-          FemaleLooks = defaultstuff.get_profile()["FemaleLooks"]
-          CharacterLastName = defaultstuff.get_profile()["CharacterLastName"]
-          CharacterFirstNameMale = defaultstuff.get_profile()["CharacterFirstNameMale"]
-          CharacterFirstNameFemale = defaultstuff.get_profile()["CharacterFirstNameFemale"]
+
+          MaleLooks = _json.get_profile()["MaleLooks"]
+          FemaleLooks = _json.get_profile()["FemaleLooks"]
+          CharacterLastName = _json.get_profile()["CharacterLastName"]
+          CharacterFirstNameMale = _json.get_profile()["CharacterFirstNameMale"]
+          CharacterFirstNameFemale = _json.get_profile()["CharacterFirstNameFemale"]
 
           maleFemaleRatio = [1, 2]
           female_height = ["4'7", "4'8", "4'9", "4'10", "4'11", "5'", "5'1", "5'2", "5'3", "5'4", "5'5", "5'6", "5'7", "5'8"]
@@ -229,7 +230,7 @@ class profile(commands.Cog):
           em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
           em.add_field(name="Level", value=f"Player Level: `0`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
           em.set_thumbnail(url=looks)
-          fourth_embed = await first_embed.edit(embed=em)
+          await first_embed.edit(embed=em)
 
           collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": gender, "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
 
@@ -251,7 +252,7 @@ class profile(commands.Cog):
     async def profile(self, ctx, *, target: discord.Member=None):
       
       # find who's profile to pull up.
-      target = defaultstuff.get_target(target, ctx.message.author.id)
+      target = tools.get_target(target, ctx.message.author.id)
 
 
       check = db["Profile"].count_documents({"_id": target})

@@ -1,8 +1,6 @@
-import json
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
-import discord
 import random
 import asyncio
 

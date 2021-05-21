@@ -1,8 +1,6 @@
-import json
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
-import discord
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))

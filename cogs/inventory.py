@@ -3,9 +3,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import asyncio
-from StuffsWeNeed import _db, embeds, defaultstuff
-import random
+from tools import _db, embeds, tools, _json
 
 intents = discord.Intents.default()
 intents.members = True
@@ -28,7 +26,7 @@ class inventory(commands.Cog):
     async def inventory(self, ctx, *, target: discord.Member=None):
 
         # find who's profile to pull up.
-        target = defaultstuff.get_target(target, ctx.message.author.id)
+        target = tools.get_target(target, ctx.message.author.id)
 
         # check if the user's profile actually exists
         check = db["Inventory"].count_documents({"_id": target})
@@ -58,7 +56,7 @@ class inventory(commands.Cog):
     async def healing_potion(self, ctx, *, target: discord.Member=None):
 
         # find who's profile to pull up.
-        target = defaultstuff.get_target(target, ctx.message.author.id)
+        target = tools.get_target(target, ctx.message.author.id)
 
         # variables
         item = "Healing Potion"
@@ -78,8 +76,8 @@ class inventory(commands.Cog):
     async def weapon(self, ctx, *, weapon):
 
         # variables
-        desc = "weapon desc"
-        thumbnail = "https://media.discordapp.net/attachments/804705780557021214/845013813605695549/pixil-frame-0_49.png"
+        desc = "Project Ax - v1 Weapon\nStage 1"
+        thumbnail = _json.get_art()[weapon.lower()]
         p = _db.get_prefix(ctx.message.guild.id)
 
         await ctx.send(embed=embeds.inventory_weapon(weapon.lower(), desc, thumbnail, p))
