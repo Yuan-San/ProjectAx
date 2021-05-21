@@ -1,0 +1,28 @@
+{
+  "longsword": "",
+  "mace": "",
+  "katana": "",
+  "dagger": "",
+  "greatsword": "",
+  "sledgehammer": "",
+  "bow": "",
+  "longbow": "",
+  
+  "healing_potion": "",
+  
+  "gem_sp": "",
+  "gem_df": "",
+  "gem_dg": "",
+  "gem_ac": "",
+  
+  "training_dummy": "",
+  
+  "tool_axe": "",
+  "tool_pickaxe": "",
+  "tool_fishing_rod": "",
+  "scissors": "",
+  
+  "bot_icon_great_sword": "",
+  "bot_icon_long_sword": "",
+  "bot_icon_long_bow": ""
+}
