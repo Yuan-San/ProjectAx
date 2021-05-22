@@ -3,7 +3,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-from tools import _db, embeds, tools, _json
+from tools import _db, embeds, tools, _json, combat
 
 intents = discord.Intents.default()
 intents.members = True
@@ -38,10 +38,13 @@ class inventory(commands.Cog):
         # inventory variables
         main_weapon = _db.get_weapons(target)[0]
         secondary_weapon = _db.get_weapons(target)[1]
+
         main_weapon_xp = _db.get_weapons(target)[2]
         secondary_weapon_xp = _db.get_weapons(target)[3]
-        main_weapon_e = _db.main_weapon_e_picker(main_weapon)
-        secondary_weapon_e = _db.secondary_weapon_e_picker(secondary_weapon)
+
+        main_weapon_e = self.client.get_emoji(combat.get_weapon_emote_id(main_weapon))
+        secondary_weapon_e = self.client.get_emoji(combat.get_weapon_emote_id(secondary_weapon))
+        
         balance = _db.get_balance(target)
         p = _db.get_prefix(ctx.message.guild.id)
         healing_potion = _db.get_item(target, "healing_potion", ctx.message.guild.id,"m")

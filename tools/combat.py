@@ -12,22 +12,14 @@ db = dbclient[os.getenv('DBSTRING2')]
 
 def get_player_stats(weapon):
     for b in db["WeaponStats"].find({"_id": weapon}):
-        dmg = b["damage"]
-        acc = b["accuracy"]
-        defence = b["defence"]
-        spd = b["speed"]
-    return (dmg, acc, defence, spd)
-
+        return (b["damage"], b["accuracy"], b["defence"], b["speed"])
 
 def get_weapon_emote_id(weapon):
     return _json.get_art()[f"{weapon}_emote_id"]
 
-
 def get_weapons(id):
     for b in db["Inventory"].find({"_id": id}):
-        main_weapon = b["main_weapon"]
-        secondary_weapon = b["secondary_weapon"]
-    return (main_weapon, secondary_weapon)
+        return (b["main_weapon"], b["secondary_weapon"])
 
 def acc_hit(acc):
     acc = float(acc) / 100
