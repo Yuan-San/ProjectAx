@@ -20,3 +20,6 @@ def get_art(filename: str = "art"):
             return json.load(data)
     except FileNotFoundError:
         raise FileNotFoundError(f"{filename}.json wasn't found")
+
+def get_emote_id(item):
+    return get_art()[f"{item}_emote_id"]

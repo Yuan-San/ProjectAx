@@ -13,10 +13,10 @@ dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
 
-def show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p):
+def show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, healing_potion_emote, p):
     em=discord.Embed(color=0xadcca6, title=f"Inventory", description=f"Balance: {balance}")
     em.add_field(name="Weapons", value=f"{main_weapon_e} {main_weapon} - xp: `{main_weapon_xp}`\n{secondary_weapon_e} {secondary_weapon} - xp: `{secondary_weapon_xp}`")
-    em.add_field(name="Items", value=f"Healing potion - `{healing_potion}`", inline=False)
+    em.add_field(name="Items", value=f"{healing_potion_emote} Healing potion - `{healing_potion}`", inline=False)
     em.set_footer(text=f"Do \"{p}inv <weapon/item>\" to see more info.")
 
     return em

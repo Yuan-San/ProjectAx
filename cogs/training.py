@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from tools import _db, embeds, combat
+from tools import _db, embeds, combat, _json
 import asyncio
 
 intents = discord.Intents.default()
@@ -40,8 +40,8 @@ class training(commands.Cog):
         em.set_footer(text="React with the corresponding weapon")
         message = await ctx.send(embed=em)
 
-        primary_emote = self.client.get_emoji(combat.get_weapon_emote_id(combat.get_weapons(ctx.message.author.id)[0]))
-        secondary_emote = self.client.get_emoji(combat.get_weapon_emote_id(combat.get_weapons(ctx.message.author.id)[1]))
+        primary_emote = self.client.get_emoji(_json.get_emote_id(combat.get_weapons(ctx.message.author.id)[0]))
+        secondary_emote = self.client.get_emoji(_json.get_emote_id(combat.get_weapons(ctx.message.author.id)[1]))
 
         await message.add_reaction(emoji=primary_emote)
         await message.add_reaction(emoji=secondary_emote)

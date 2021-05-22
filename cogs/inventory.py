@@ -42,15 +42,17 @@ class inventory(commands.Cog):
         main_weapon_xp = _db.get_weapons(target)[2]
         secondary_weapon_xp = _db.get_weapons(target)[3]
 
-        main_weapon_e = self.client.get_emoji(combat.get_weapon_emote_id(main_weapon))
-        secondary_weapon_e = self.client.get_emoji(combat.get_weapon_emote_id(secondary_weapon))
+        main_weapon_e = self.client.get_emoji(_json.get_emote_id(main_weapon))
+        secondary_weapon_e = self.client.get_emoji(_json.get_emote_id(secondary_weapon))
         
         balance = _db.get_balance(target)
         p = _db.get_prefix(ctx.message.guild.id)
+
         healing_potion = _db.get_item(target, "healing_potion", ctx.message.guild.id,"m")
+        healing_potion_emote = self.client.get_emoji(_json.get_emote_id("healing_potion"))
 
         # create inventory embed
-        em = embeds.show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, p)
+        em = embeds.show_inv(balance, main_weapon_e, main_weapon, main_weapon_xp, secondary_weapon_e, secondary_weapon, secondary_weapon_xp, healing_potion, healing_potion_emote, p)
 
         await ctx.send(embed=em)
     
