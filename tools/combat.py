@@ -1,8 +1,10 @@
+from re import A
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 import random
 import asyncio
+from tools import _json
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -16,10 +18,10 @@ def get_player_stats(weapon):
         spd = b["speed"]
     return (dmg, acc, defence, spd)
 
+
 def get_weapon_emote_id(weapon):
-    for b in db["WeaponStats"].find({"_id": weapon}):
-        emote_id = b["emote_id"]
-    return emote_id
+    return _json.get_art()[f"{weapon}_emote_id"]
+
 
 def get_weapons(id):
     for b in db["Inventory"].find({"_id": id}):

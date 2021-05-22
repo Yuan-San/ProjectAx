@@ -8,14 +8,14 @@
   "bow": "https://i.imgur.com/VVCvPNE.png",
   "longbow": "https://i.imgur.com/Fac0WdQ.png",
   
-  "longsword_emote_id": "841591365649170463",
-  "mace_emote_id": "841591275567579156",
-  "katana_emote_id": "841591388055273472",
-  "dagger_emote_id": "841591344308158516",
-  "greatsword_emote_id": "841591317368799242",
-  "sledgehammer_emote_id": "841591294115315753",
-  "bow_emote_id": "841631789675053077",
-  "longbow_emote_id": "841592788084326400",
+  "longsword_emote_id": 841591365649170463,
+  "mace_emote_id": 841591275567579156,
+  "katana_emote_id": 841591388055273472,
+  "dagger_emote_id": 841591344308158516,
+  "greatsword_emote_id": 841591317368799242,
+  "sledgehammer_emote_id": 841591294115315753,
+  "bow_emote_id": 841631789675053077,
+  "longbow_emote_id": 841592788084326400,
   
   "healing_potion": "https://i.imgur.com/ZpE5b68.png",
   
