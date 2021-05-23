@@ -80,14 +80,23 @@ class training(commands.Cog):
 
         prHP = d_hp
         moves = 0
+        misses=0
 
         # the fight
         while d_hp > 0 and p_hp > 0:
             
             HorM = combat.hit_or_miss(d_hp, prHP, moves)
+
+            # miss counter
+            if HorM == "- Miss!":
+                misses += 1
+            else: 
+                misses = 0
+            miss_counter = combat.miss_counter(misses)
+
             prHP = d_hp
 
-            await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM))
+            await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM, miss_counter))
 
             # player move
             d_hp = combat.attack(p_dmg, p_acc, d_def, d_hp)

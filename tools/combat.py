@@ -55,6 +55,10 @@ def hit_or_miss(e_hp, prHP, moves):
     else:
         return "- Hit!"
 
+def miss_counter(misses):
+    if misses == 0 or misses == 1: return ""
+    return f"({misses})"
+
 async def pve(spd, dmg, acc, df, hp):
     a = 1
     spd = float(spd/10)

@@ -1,3 +1,4 @@
+from tools.combat import miss_counter
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
@@ -43,10 +44,10 @@ def inventory_weapon(weapon, desc, thumbnail, p):
 
     return em
 
-def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss):
+def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss, miss_counter):
     em=discord.Embed(color=0xadcca6)
     em.set_author(name=title)
-    em.add_field(name=f"You {hit_or_miss}", value=f"hp: {int(p_hp)}", inline=False)
+    em.add_field(name=f"You {hit_or_miss} {miss_counter}", value=f"hp: {int(p_hp)}", inline=False)
     em.add_field(name=enemy, value=f"hp: {int(e_hp)}", inline=False)
     em.set_thumbnail(url=thumbnail)
 
