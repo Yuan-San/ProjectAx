@@ -1,7 +1,7 @@
 import os
 
 def get_version():
-    v="v1.2.9-a"
+    v="v1.2.10-a"
     return v
 
 def get_target(target, id):
