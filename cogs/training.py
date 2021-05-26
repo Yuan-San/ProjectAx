@@ -110,11 +110,16 @@ class training(commands.Cog):
                 if moves == 0:
                     miss_counter_d = ""
                     miss_counter_p = ""
+                    hit_counter_d = ""
+                    hit_counter_p = ""
                     HorM_d = ""
                     HorM_p = ""
                     misses_d = 0
                     misses_p = 0
-                    await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, moves, tools.ismain()))
+                    hits_d = 0
+                    hits_p = 0
+                    await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
+
 
                 ## PLAYER'S TURN
                 d_hp = combat.attack(p_dmg, p_acc, d_def, d_hp)
@@ -124,14 +129,17 @@ class training(commands.Cog):
 
                 if HorM_p == "- Miss!":
                     misses_p += 1
+                    hits_p = 0
                 else:
                     misses_p = 0
+                    hits_p += 1
 
                 miss_counter_p = combat.miss_counter(misses_p)
+                hit_counter_p = combat.hit_counter(hits_p)
 
                 prHP_d = d_hp
 
-                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, moves, tools.ismain()))
+                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
 
                 await asyncio.sleep(1)
 
@@ -144,19 +152,22 @@ class training(commands.Cog):
 
                 if HorM_d == "- Miss!":
                     misses_d += 1
+                    hits_d = 0
                 else:
+                    hits_d += 1
                     misses_d = 0
 
                 miss_counter_d = combat.miss_counter(misses_d)
+                hit_counter_d = combat.hit_counter(hits_d)
 
                 prHP_p = p_hp
 
-                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, moves, tools.ismain()))
+                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
 
                 await asyncio.sleep(1)
 
 
-            # results
+            ## RESULTS
             winner = combat.winner(p_hp, d_hp)
             if winner == "Enemy": winner = "Training Dummy"
             else:
@@ -164,6 +175,8 @@ class training(commands.Cog):
 
             await message.edit(embed=embeds.pve_combat_embed_winner(p_hp, d_hp, thumbnail, title, enemy, winner))
 
+
+        ## TIMEOUT - INTERACTION
         except asyncio.TimeoutError:
             await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** You failed to reply in time."))
 

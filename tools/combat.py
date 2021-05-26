@@ -59,6 +59,10 @@ def miss_counter(misses):
     if misses == 0 or misses == 1: return ""
     return f"({misses})"
 
+def hit_counter(hits):
+    if hits == 0 or hits == 1: return ""
+    return f"({hits})"
+
 # async def pve(spd, dmg, acc, df, hp):
 #     a = 1
 #     spd = float(spd/10)

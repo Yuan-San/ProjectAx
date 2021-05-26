@@ -44,11 +44,11 @@ def inventory_weapon(weapon, desc, thumbnail, p):
 
     return em
 
-def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, moves, beta):
+def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, beta):
     em=discord.Embed(color=0xadcca6)
     em.set_author(name=title)
-    em.add_field(name=f"You {hit_or_miss_p} {miss_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
-    em.add_field(name=f"{enemy} {hit_or_miss_d} {miss_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
+    em.add_field(name=f"You {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
+    em.add_field(name=f"{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
 
     if not beta:
         em.set_footer(text=f"Prax Bèta; Testing - Moves: {moves}")
