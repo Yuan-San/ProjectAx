@@ -18,7 +18,7 @@ db = dbclient[os.getenv('DBSTRING2')]
 class profile(commands.Cog):
     def __init__(self, client):
         self.client = client
-    
+
     @commands.Cog.listener()
     async def on_ready(self):
       print ('profile.py -> on_ready()')
@@ -30,7 +30,7 @@ class profile(commands.Cog):
 
       check = collection.count_documents({"_id": ctx.message.author.id})
       if check != 0:
-        
+
         profile = db["Profile"].find({"_id": ctx.message.author.id})
         for b in profile:
           first_name=b["first_name"]
@@ -51,7 +51,7 @@ class profile(commands.Cog):
         await first_embed.add_reaction(emoji='✅')
         await first_embed.add_reaction(emoji='🛑')
       except:
-        await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+        await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
         return
 
       # weapon variables
@@ -67,7 +67,7 @@ class profile(commands.Cog):
       def checkforR(reaction, msg):
         return msg == ctx.message.author and reaction.emoji in ['✅', '🛑', longsword, katana, dagger, greatsword, sledgehammer, mace, bow, longbow]
 
-      try: 
+      try:
 
         reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
@@ -86,8 +86,8 @@ class profile(commands.Cog):
           em.add_field(name=f"{mace} Mace {mace}", value=_db.get_weapon_stats_list("mace"))
           em.set_footer(text="React to the corresponding emote to select that weapon.")
           second_embed = await first_embed.edit(embed=em)
-          
-          try: 
+
+          try:
             await first_embed.add_reaction(emoji=longsword)
             await first_embed.add_reaction(emoji=katana)
             await first_embed.add_reaction(emoji=dagger)
@@ -96,7 +96,7 @@ class profile(commands.Cog):
             await first_embed.add_reaction(emoji=mace)
             await first_embed.add_reaction(emoji='🛑')
           except:
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
             return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
@@ -107,26 +107,26 @@ class profile(commands.Cog):
           elif reaction.emoji == greatsword: main_weapon = "greatsword"
           elif reaction.emoji == sledgehammer: main_weapon = "sledgehammer"
           elif reaction.emoji == mace: main_weapon = "mace"
-          else: 
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+          else:
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
             return
 
           await first_embed.clear_reactions()
 
           # confirmation
           second_confirm_embed = await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{main_weapon}** as your main weapon?"))
-          
+
           try:
             await first_embed.add_reaction(emoji='✅')
             await first_embed.add_reaction(emoji='🛑')
           except:
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
             return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
           if reaction.emoji == '🛑':
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
             return
 
           await first_embed.clear_reactions()
@@ -145,7 +145,7 @@ class profile(commands.Cog):
             await first_embed.add_reaction(emoji=longbow)
             await first_embed.add_reaction(emoji='🛑')
           except:
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
             return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR)
@@ -153,27 +153,27 @@ class profile(commands.Cog):
           if reaction.emoji == bow: secondary_weapon = "bow"
           elif reaction.emoji == longbow: secondary_weapon = "longbow"
           elif reaction.emoji == '🛑':
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
             return
 
           await first_embed.clear_reactions()
-        
+
           # confirmation
           await first_embed.edit(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to pick **{secondary_weapon}** as your secondary weapon?"))
-          
+
           try:
             await first_embed.add_reaction(emoji='✅')
             await first_embed.add_reaction(emoji='🛑')
           except:
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
             return
 
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
           if reaction.emoji == '🛑':
-            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled.")) 
+            await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** The command was canceled."))
             return
-          
+
           await first_embed.clear_reactions()
 
 
@@ -186,9 +186,9 @@ class profile(commands.Cog):
 
             await ctx.send(embed=em)
             return
-          
+
           # add both weapons to the database (inventory)
-          try: 
+          try:
             _db.create_inventory(ctx.message.author.id, main_weapon, secondary_weapon)
           except:
             await ctx.send(embed=embeds.error_1(ctx.author.name, ctx.author.discriminator))
@@ -246,11 +246,11 @@ class profile(commands.Cog):
 
       except asyncio.TimeoutError:
         await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** You failed to reply in time."))
-    
+
 
     @commands.command(aliases=['p'])
     async def profile(self, ctx, *, target: discord.Member=None):
-      
+
       # find who's profile to pull up.
       target = tools.get_target(target, ctx.message.author.id)
 
@@ -261,7 +261,7 @@ class profile(commands.Cog):
 
         await ctx.send(embed=em)
         return
-      
+
       profile = db["Profile"].find({"_id": target})
       for b in profile:
         age = b["age"]
@@ -274,10 +274,10 @@ class profile(commands.Cog):
         looks=b["looks"]
         world=b["world"]
         xp = b["xp"]
-      
+
       main_weapon = _db.get_weapons(ctx.message.author.id)[0]
       secondary_weapon = _db.get_weapons(ctx.message.author.id)[1]
-      
+
       em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
       em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {friend_id}", inline=False)
       em.add_field(name="Region", value=f"World: {world}\nDistrict: {district}", inline=False)
@@ -291,14 +291,14 @@ class profile(commands.Cog):
         em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Couldn't find a Project Ax profile linked to that account.")
 
         await ctx.send(embed=em)
-    
+
     @commands.command(aliases=['delp', 'deletep'])
     @commands.is_owner()
     async def delprofile(self, ctx, *, id: int):
 
       check = db["Profile"].count_documents({"_id": id})
       if check != 0:
-        
+
         profile = db["Profile"].find({"_id": id})
         for b in profile:
           first_name=b["first_name"]
@@ -317,10 +317,10 @@ class profile(commands.Cog):
           await message_embed.add_reaction(emoji='✅')
           await message_embed.add_reaction(emoji='🛑')
         except:
-          await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!")) 
+          await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
           return
 
-        try: 
+        try:
           reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
 
           if reaction.emoji == '✅':
@@ -354,7 +354,7 @@ class profile(commands.Cog):
 
       else:
         await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Couldn't find any profile with that ID."))
-    
+
     @commands.command(aliases=['eprofile', 'editp'])
     @commands.is_owner()
     async def editprofile(self, ctx, target: discord.Member, query: str, edit: str):
@@ -372,22 +372,22 @@ class profile(commands.Cog):
       except:
         em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
         await ctx.send(embed=em)
-      
+
       em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Updated the value \"{query}\" from `{to_edit}` to `{edit}` in document with \"_id\": `{target}`.")
       await ctx.send(embed=em)
-    
+
     @editprofile.error
     async def editprofile_error(self, ctx, error):
         em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
-        await ctx.send(embed=em)      
-      
+        await ctx.send(embed=em)
+
     @commands.command()
     @commands.is_owner()
     async def insert_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
       collection = db["WeaponStats"]
       collection.insert_one({"_id": weapon, "damage": damage, "accuracy": accuracy, "defence": defence, "speed": speed})
       await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Added weapon ({weapon}) to the database.\nDamaga: {damage}\nAccuracy: {accuracy}\nDefence: {defence}\nSpeed: {speed}"))
-    
+
     @commands.command()
     @commands.is_owner()
     async def update_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
