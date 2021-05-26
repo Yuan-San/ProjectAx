@@ -36,10 +36,84 @@ class training(commands.Cog):
                 await ctx.send(embed=em)
                 return
 
+
+            ## ASK WHICH DUMMY STATS TO USE
+            message = await ctx.send(embed=embeds.dummy_stat_embed_1(ctx.author.name, ctx.author.discriminator))
+            await message.add_reaction(emoji='1️⃣')
+            await message.add_reaction(emoji='2️⃣')
+            await message.add_reaction(emoji='3️⃣')
+            await message.add_reaction(emoji='4️⃣')
+            await message.add_reaction(emoji='5️⃣')
+            await message.add_reaction(emoji='🛑')
+
+            def checkforR1(reaction, msg):
+                return msg == ctx.message.author and reaction.emoji in ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '🛑']
+
+            reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR1)
+
+            # OPTION 4 - CHOOSE PREVIOUS DUMMY STATS
+            if reaction.emoji == '4️⃣':
+                await message.clear_reactions()
+                if _db.get_training_status(ctx.message.author.id):
+                    dmg = _db.get_dummy_stats(ctx.message.author.id, 'd_dmg')
+                    acc = _db.get_dummy_stats(ctx.message.author.id, 'd_acc')
+                    df = _db.get_dummy_stats(ctx.message.author.id, 'd_def')
+                    spd = _db.get_dummy_stats(ctx.message.author.id, 'd_spd')
+                    hp = _db.get_dummy_stats(ctx.message.author.id, 'd_hp')
+                else:
+                    await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I can't find anything, seems like you're playing training mode for the first time! Try again."))
+                    return
+
+
+            # OPTION 5 - CHOOSE YOUR OWN WEAPON
+            if reaction.emoji == '5️⃣':
+                await message.clear_reactions()
+                await message.edit(embed=embeds.dummy_stat_embed_2(ctx.author.name, ctx.author.discriminator))
+                msg = await self.client.wait_for('message', timeout=120, check=lambda message: message.author == ctx.author)
+
+                await msg.delete()
+
+                dummyS=msg.content.lower().split(',')
+                print(dummyS[0].strip(), dummyS[1].strip(), dummyS[2].strip(), dummyS[3].strip(), dummyS[4].strip())
+
+                for i in dummyS:
+                    if int(i.strip())>5000 or int(i.strip())<0:
+                        await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Woah there! Those numbers you use are not allowed, please use numbers between **0** and **5000**"))
+                        return
+
+                if int(dummyS[3].strip()) < 500:
+                    await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Because we don't want our bot to explode, we don't allow combat speeds below **500** milliseconds. Try again :/"))
+                    return
+
+                dmg = int(dummyS[0].strip())
+                acc = int(dummyS[1].strip())
+                df = int(dummyS[2].strip())
+                spd = int(dummyS[3].strip())
+                hp = int(dummyS[4].strip())
+            ################################################################################################
+            ################################################################################################
+
+            # SHUT DOWN
+            if reaction.emoji == '🛑':
+                await ctx.send(embed=embeds.error_2(ctx.author.name, ctx.author.discriminator))
+                return
+
+
+            d_dmg = dmg
+            d_acc = acc
+            d_def = df
+            d_spd = spd
+            d_hp = hp
+
+            ## SAVE DUMMY STATS TO DATABASE
+            collection = db["Training"]
+            collection.update_one({"_id": ctx.message.author.id}, {"$set":{"d_dmg": d_dmg, "d_acc": d_acc, "d_def": d_def, "d_spd": d_spd, "d_hp": d_hp}}, upsert=True)
+
+
             # ask which weapon to use
             em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Which weapon do you want to use? You can choose between your equipped primary & secondary weapons. ")
             em.set_footer(text="React with the corresponding weapon")
-            message = await ctx.send(embed=em)
+            await message.edit(embed=em)
 
             primary_emote = self.client.get_emoji(_json.get_emote_id(combat.get_weapons(ctx.message.author.id)[0]))
             secondary_emote = self.client.get_emoji(_json.get_emote_id(combat.get_weapons(ctx.message.author.id)[1]))
@@ -64,32 +138,6 @@ class training(commands.Cog):
             thumbnail = "https://media.discordapp.net/attachments/804705780557021214/843115592319107113/pixil-frame-0_45.png"
             title = "Training Mode"
             enemy = "Dummy"
-
-
-            # ask for dummy stats
-            await message.edit(embed=embeds.dummy_stat_embed(ctx.author.name, ctx.author.discriminator))
-            msg = await self.client.wait_for('message', timeout=120, check=lambda message: message.author == ctx.author)
-
-            await msg.delete()
-
-            dummyS=msg.content.lower().split(',')
-            print(dummyS[0].strip(), dummyS[1].strip(), dummyS[2].strip(), dummyS[3].strip(), dummyS[4].strip())
-
-            for i in dummyS:
-                if int(i.strip())>5000 or int(i.strip())<0:
-                    await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Woah there! Those numbers you use are not allowed, please use numbers between **0** and **5000**"))
-                    return
-
-            if int(dummyS[3].strip()) < 500:
-                await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Because we don't want our bot to explode, we don't allow combat speeds below **500** milliseconds. Try again :/"))
-                return
-
-            # dummy's stats
-            d_dmg = int(dummyS[0].strip())
-            d_acc = int(dummyS[1].strip())
-            d_def = int(dummyS[2].strip())
-            d_spd = int(dummyS[3].strip())
-            d_hp = int(dummyS[4].strip())
 
             # player's stats
             p_dmg = combat.get_player_stats(weapon)[0]

@@ -67,7 +67,14 @@ def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
 
     return em
 
-def dummy_stat_embed(a, b):
+def dummy_stat_embed_1(a, b):
+    em=discord.Embed(color=0xadcca6, description = f"**{a}#{b}** What should the stats of the training dummy be?")
+    em.add_field(name="Game Modes", value="**1. Easy** - The gods of Axem deem this a piece of cake\n**2. Medium** - Prepare well! fancy a ride?\n**3. Hard** - Prepare yourself to die.")
+    em.add_field(name="Custom Stats", value="**4. Previous Stats** - Pick the stats you picked last time!\n**5. Other Stats** - You're the God now, pick!", inline=False)
+
+    return em
+
+def dummy_stat_embed_2(a, b):
     em=discord.Embed(color=0xadcca6, description = f"**{a}#{b}** What should the stats of the training dummy be?")
     em.add_field(name="Values", value="`dmg` - the amount of damage the dummy inflicts\n`acc` - a % chance of inflicting damage\n`def` - a % of damage that subtracts from the damage the dummy receives\n`spd` - the amount of milliseconds between each attempt to hit\n`hp`  - the amount of health point the dummy has")
     em.add_field(name="Examples", value="30,34,60,750,250\n70, 50, 50, 2500, 400\n..", inline=False)
@@ -80,5 +87,9 @@ def dummy_stat_embed(a, b):
 # errors
 def error_1(a, b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Something went wrong.")
+
+    return em
+def error_2(a,b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** The command was canceled.")
 
     return em

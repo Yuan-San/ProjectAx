@@ -78,3 +78,10 @@ def winner(youHP, enemyHP):
         return "you"
     else:
         return "?"
+
+def get_gamemode_easy():
+    pass
+def get_gamemode_medium():
+    pass
+def get_gamemode_hard():
+    pass

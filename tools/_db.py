@@ -14,7 +14,7 @@ def get_prefix(id):
 
 def create_inventory(id, main_weapon, secondary_weapon):
     db["Inventory"].insert_one({"_id": id, "main_weapon": main_weapon, "secondary_weapon": secondary_weapon, "main_weapon_xp": 0, "secondary_weapon_xp": 0, "balance": 0})
-    
+
 def delete_inventory(id):
     db["Inventory"].delete_one({"_id": id})
 
@@ -25,7 +25,7 @@ def get_weapons(id):
 def get_balance(id):
     for b in db["Inventory"].find({"_id": id}):
         balance = b["balance"]
-    
+
     return balance
 
 def get_items_precheck(id, item, mainCommand):
@@ -42,7 +42,7 @@ def get_item(id, item, guild_id, mainCommand):
     check = db["Inventory"].count_documents({"_id": id})
     if check != 0:
         return get_items_precheck(id, item, mainCommand)
-        
+
     return f"You don't have a profile yet. Create one: `{get_prefix(guild_id)}createprofile`"
 
 def get_weapon_stats(weapon, stat):
@@ -55,3 +55,11 @@ def get_weapon_stats_list(weapon):
 def get_profile_looks(id):
     for b in db["Profile"].find({"_id": id}):
         return b["looks"]
+
+def get_training_status(id):
+    if db["Training"].count_documents({"_id": id}) == 0: return False
+    return True
+
+def get_dummy_stats(id, stat):
+    for b in db["Training"].find({"_id": id}):
+        return b[stat]
