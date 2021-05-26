@@ -96,7 +96,7 @@ class training(commands.Cog):
             p_acc = combat.get_player_stats(weapon)[1]
             p_def = combat.get_player_stats(weapon)[2]
             p_spd = combat.get_player_stats(weapon)[3]
-            p_hp = 500
+            p_hp = 250
 
             prHP_d=d_hp
             prHP_p = p_hp
@@ -118,10 +118,15 @@ class training(commands.Cog):
                     misses_p = 0
                     hits_d = 0
                     hits_p = 0
-                    await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
+                    player_move_indicator = ""
+                    dummy_move_indicator = ""
+                    await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, dummy_move_indicator, tools.ismain()))
 
 
                 ## PLAYER'S TURN
+                player_move_indicator = "\> "
+                dummy_move_indicator = ""
+
                 d_hp = combat.attack(p_dmg, p_acc, d_def, d_hp)
                 moves += 1
 
@@ -139,12 +144,15 @@ class training(commands.Cog):
 
                 prHP_d = d_hp
 
-                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
+                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, dummy_move_indicator, tools.ismain()))
 
                 await asyncio.sleep(1)
 
 
                 ## DUMMY'S TURN
+                player_move_indicator = ""
+                dummy_move_indicator = "\> "
+
                 p_hp = combat.attack(d_dmg, d_acc, p_def, p_hp)
                 moves += 1
 
@@ -162,7 +170,7 @@ class training(commands.Cog):
 
                 prHP_p = p_hp
 
-                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, tools.ismain()))
+                await message.edit(embed=embeds.pve_combat_embed(p_hp, weapon, p_dmg, p_acc, p_def, p_spd, d_hp, thumbnail, title, enemy, HorM_p, HorM_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, dummy_move_indicator, tools.ismain()))
 
                 await asyncio.sleep(1)
 

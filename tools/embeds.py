@@ -44,11 +44,11 @@ def inventory_weapon(weapon, desc, thumbnail, p):
 
     return em
 
-def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, beta):
+def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, beta):
     em=discord.Embed(color=0xadcca6)
     em.set_author(name=title)
-    em.add_field(name=f"You {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
-    em.add_field(name=f"{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
+    em.add_field(name=f"{player_move_indicator}You {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
+    em.add_field(name=f"{enemy_move_indicator}{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
 
     if not beta:
         em.set_footer(text=f"Prax Bèta; Testing - Moves: {moves}")
@@ -70,7 +70,7 @@ def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
 def dummy_stat_embed(a, b):
     em=discord.Embed(color=0xadcca6, description = f"**{a}#{b}** What should the stats of the training dummy be?")
     em.add_field(name="Values", value="`dmg` - the amount of damage the dummy inflicts\n`acc` - a % chance of inflicting damage\n`def` - a % of damage that subtracts from the damage the dummy receives\n`spd` - the amount of milliseconds between each attempt to hit\n`hp`  - the amount of health point the dummy has")
-    em.add_field(name="Examples", value="30,34,60,750,1000\n70, 50, 50, 2500, 1300\n..", inline=False)
+    em.add_field(name="Examples", value="30,34,60,750,250\n70, 50, 50, 2500, 400\n..", inline=False)
     em.set_footer(text="Type the stats below, seperated by a comma.")
 
     return em
