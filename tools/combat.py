@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 import random
 import asyncio
-from tools import _json
+from tools import _json, embeds, tools
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -59,12 +59,13 @@ def miss_counter(misses):
     if misses == 0 or misses == 1: return ""
     return f"({misses})"
 
-async def pve(spd, dmg, acc, df, hp):
-    a = 1
-    spd = float(spd/10)
-    while a==1:
-        attack(dmg, acc, df, hp)
-        await asyncio.sleep(spd)
+# async def pve(spd, dmg, acc, df, hp):
+#     a = 1
+#     spd = float(spd/10)
+#     while a==1:
+#         attack(dmg, acc, df, hp)
+#         await asyncio.sleep(spd)
+
 
 def winner(youHP, enemyHP):
     if youHP == 0.0:
