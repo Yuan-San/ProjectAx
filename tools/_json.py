@@ -21,5 +21,12 @@ def get_art(filename: str = "art"):
     except FileNotFoundError:
         raise FileNotFoundError(f"{filename}.json wasn't found")
 
+def get_gamemode(filename: str = "gamemodes"):
+    try:
+        with open(f"tools/jsons/{filename}.json", encoding='utf8') as data:
+            return json.load(data)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"{filename}.json wasn't found")
+
 def get_emote_id(item):
     return get_art()[f"{item}_emote_id"]

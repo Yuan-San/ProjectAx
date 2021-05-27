@@ -36,6 +36,8 @@ class training(commands.Cog):
                 await ctx.send(embed=em)
                 return
 
+            # set winner stats to return a correct message.
+            winner_gamemode = "-"
 
             ## ASK WHICH DUMMY STATS TO USE
             message = await ctx.send(embed=embeds.dummy_stat_embed_1(ctx.author.name, ctx.author.discriminator))
@@ -51,6 +53,25 @@ class training(commands.Cog):
 
             reaction, msg = await self.client.wait_for('reaction_add', timeout=120, check=checkforR1)
 
+            # OPTION 1,2 & 3 - GAMEMODES
+            if reaction.emoji == '1️⃣' or reaction.emoji == '2️⃣' or reaction.emoji == '3️⃣':
+                if reaction.emoji == '1️⃣':
+                    mode = "Easy"
+                if reaction.emoji == '2️⃣':
+                    mode = "Medium"
+                if reaction.emoji == '3️⃣':
+                    mode = "Hard"
+
+                winner_gamemode = mode
+
+                await message.clear_reactions()
+                dmg = combat.get_gamemode_stats(mode.lower())[0]
+                acc = combat.get_gamemode_stats(mode.lower())[1]
+                df = combat.get_gamemode_stats(mode.lower())[2]
+                spd = combat.get_gamemode_stats(mode.lower())[3]
+                hp = combat.get_gamemode_stats(mode.lower())[4]
+
+
             # OPTION 4 - CHOOSE PREVIOUS DUMMY STATS
             if reaction.emoji == '4️⃣':
                 await message.clear_reactions()
@@ -63,7 +84,6 @@ class training(commands.Cog):
                 else:
                     await ctx.send(embed=discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** I can't find anything, seems like you're playing training mode for the first time! Try again."))
                     return
-
 
             # OPTION 5 - CHOOSE YOUR OWN WEAPON
             if reaction.emoji == '5️⃣':
@@ -229,7 +249,7 @@ class training(commands.Cog):
             else:
                 thumbnail = _db.get_profile_looks(ctx.message.author.id)
 
-            await message.edit(embed=embeds.pve_combat_embed_winner(p_hp, d_hp, thumbnail, title, enemy, winner))
+            await message.edit(embed=embeds.pve_combat_embed_winner(p_hp, d_hp, thumbnail, title, enemy, combat.get_winner_message(winner_gamemode, winner)))
 
 
         ## TIMEOUT - INTERACTION

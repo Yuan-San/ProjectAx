@@ -79,9 +79,26 @@ def winner(youHP, enemyHP):
     else:
         return "?"
 
-def get_gamemode_easy():
-    pass
-def get_gamemode_medium():
-    pass
-def get_gamemode_hard():
-    pass
+def get_gamemode_stats(gamemode):
+    dmg = _json.get_gamemode()[f"{gamemode}_dmg"]
+    acc = _json.get_gamemode()[f"{gamemode}_acc"]
+    df = _json.get_gamemode()[f"{gamemode}_def"]
+    spd = _json.get_gamemode()[f"{gamemode}_spd"]
+    hp = _json.get_gamemode()[f"{gamemode}_hp"]
+
+    return (dmg, acc, df, spd, hp)
+
+def get_winner_message(a, winner):
+    if a == "Easy" or a == "Medium" or a == "Hard":
+        if winner == "Training Dummy":
+            return f"{a} Mode - You've lost! Try again."
+        if winner == "you":
+            return f"{a} Mode - You won!"
+
+    elif a == "-":
+        if winner == "Training Dummy":
+            return "You've lost! Ouch."
+        if winner == "you":
+            return "You won. Congrats!"
+
+    return "?"

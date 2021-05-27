@@ -58,12 +58,11 @@ def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail
     return em
 
 def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
-    em=discord.Embed(color=0xadcca6, title=f"The winner of the fight is **{winner}**!!")
+    em=discord.Embed(color=0xadcca6, title=winner)
     em.set_author(name=title)
     em.add_field(name="You", value=f"Hp: {int(p_hp)}")
     em.add_field(name=enemy, value=f"Hp: {int(e_hp)}")
     em.set_thumbnail(url=thumbnail)
-    em.title=f"The winner of the fight is **{winner}**!!"
 
     return em
 
