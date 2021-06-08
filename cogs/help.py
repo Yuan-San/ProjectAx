@@ -30,18 +30,16 @@ class Help(commands.Cog):
     # list of modules;
     @commands.command()
     async def module(self, ctx, param):
-        p = _db.get_prefix(ctx.message.author.id)
+        p = _db.get_prefix(ctx.message.guild.id)
         module = _json.get_help()["modules"][param]
+
         cmdList = ""
-
         for cmd in module["commands"]:
-            cmdList += "`" + cmd + "`\n"
-
-        cmdList.replace("{0}", p)
+            cmdList += "`" + cmd.replace("{0}", str(p)) + "`\n"
 
         em = discord.Embed(color = 0xadcca6, title=module["title"])
         em.add_field(name="Commands", value=cmdList)
-        em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
+        em.set_thumbnail(url=_json.get_art()["bot_icon_greatsword"])
         em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
         await ctx.send(embed=em)
 

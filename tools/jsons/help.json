@@ -6,27 +6,46 @@
     },
     "inventory": {
       "title": "Project Ax Inventory",
-      "commands": ""
+      "commands": [
+        "{0}"
+      ]
     },
     "training": {
       "title": "Project Ax Training",
-      "commands": ""
+      "commands": [
+        "{0}"
+      ]
     },
     "configuration": {
       "title": "Project Ax Configuration",
       "commands": [
         "{0}prefix",
-        "{0}other cmd",
-        "{0}another one?"
+        "",
+        ""
       ]
     },
     "bot_admin_only": {
       "title": "Project Ax Bot Admin",
-      "commands": ""
+      "commands": [
+        "{0}"
+      ]
     },
     "miscellaneous": {
       "title": "Project Ax Misc",
-      "commands": ""
+      "commands": [
+        "{0}"
+      ]
+    }
+  },
+
+  "commands":{
+    "prefix": {
+      "cmd": "prefix",
+      "desc": "Changes the bot's prefix. Do `ax prefix ax` or `ax prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`",
+      "perms": "ManageGuild Permission",
+      "usage": [
+        "{0}prefix"
+      ]
     }
   }
 }
