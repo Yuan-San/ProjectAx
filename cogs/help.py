@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from tools import _db
+from tools import _db, _json
 
 intents = discord.Intents.default()
 intents.members = True
@@ -20,51 +20,30 @@ class Help(commands.Cog):
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax")
 
-      em.add_field(name="Modules", value="`Configuration`\n`Profile`\n`Miscellaneous`\n`Bot Admin Only`")
+      em.add_field(name="Profile", value="`Profile` - Create & manage your profile\n`Inventory` - Check your inventory or vault")
+      em.add_field(name="Combat", value="`Training` - Try out your stats & items", inline=False)
+      em.add_field(name="Bot Configuration", value="`Configuration`\n`Bot Admin Only`\n`Miscellaneous`", inline=False)
       em.set_footer(text = f"do \"{p}help <module>\" to see all commands in a module.")
       em.set_thumbnail(url = "https://media.discordapp.net/attachments/839537047470473227/840579240088043560/pixil-frame-0_40.png?width=425&height=425")
       await ctx.send(embed = em)
 
     # list of modules;
-    @help.command(aliases=['configuration'])
-    async def config(self, ctx):
-      p = _db.get_prefix(ctx.message.guild.id)
+    @commands.command()
+    async def module(self, ctx, param):
+        p = _db.get_prefix(ctx.message.author.id)
+        module = _json.get_help()["modules"][param]
+        cmdList = ""
 
-      em = discord.Embed(color = 0xadcca6, title="Project Ax Configuration")
-      em.add_field(name="Commands", value=f"`{p}prefix`")
-      em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
-      em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)
+        for cmd in module["commands"]:
+            cmdList += "`" + cmd + "`\n"
 
-    @help.command()
-    async def profiles(self, ctx):
-      p = _db.get_prefix(ctx.message.guild.id)
+        cmdList.replace("{0}", p)
 
-      em = discord.Embed(color = 0xadcca6, title="Project Ax Profiles")
-      em.add_field(name="Commands", value=f"`{p}createprofile` / `{p}cp`\n`{p}profile` / `{p}p`")
-      em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
-      em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)
-
-    @help.command(aliases=['misc'])
-    async def miscellaneous(self, ctx):
-      p = _db.get_prefix(ctx.message.guild.id)
-
-      em = discord.Embed(color = 0xadcca6, title="Project Ax Miscellaneous")
-      em.add_field(name="Commands", value=f"`{p}ping`\n`{p}invite`\n`{p}readme`\n`{p}say`\n`{p}stats`")
-      em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
-      em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)
-
-    @help.command(aliases=['botadmin', 'botadminonly', 'admin', 'bot', 'owneronly', 'adminonly'])
-    async def admin_only(self, ctx):
-      p = _db.get_prefix(ctx.message.guild.id)
-
-      em = discord.Embed(color = 0xadcca6, title="Project Ax Admin Only")
-      em.add_field(name="Commands", value=f"`{p}die`\n`{p}delprofile`\n`{p}editprofile`")
-      em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
-      em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)
+        em = discord.Embed(color = 0xadcca6, title=module["title"])
+        em.add_field(name="Commands", value=cmdList)
+        em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
+        em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
+        await ctx.send(embed=em)
 
     # commands
     @help.command()

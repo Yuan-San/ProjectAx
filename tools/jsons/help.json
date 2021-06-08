@@ -1,0 +1,32 @@
+{
+  "modules": {
+    "profile": {
+      "title": "Project Ax Profiles",
+      "commands": ""
+    },
+    "inventory": {
+      "title": "Project Ax Inventory",
+      "commands": ""
+    },
+    "training": {
+      "title": "Project Ax Training",
+      "commands": ""
+    },
+    "configuration": {
+      "title": "Project Ax Configuration",
+      "commands": [
+        "{0}prefix",
+        "{0}other cmd",
+        "{0}another one?"
+      ]
+    },
+    "bot_admin_only": {
+      "title": "Project Ax Bot Admin",
+      "commands": ""
+    },
+    "miscellaneous": {
+      "title": "Project Ax Misc",
+      "commands": ""
+    }
+  }
+}

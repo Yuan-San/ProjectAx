@@ -11,7 +11,6 @@ def get_prefix(id):
     for b in (db["Prefix"].find({"server_id": id})):
         return b["prefix"]
 
-
 def create_inventory(id, main_weapon, secondary_weapon):
     db["Inventory"].insert_one({"_id": id, "main_weapon": main_weapon, "secondary_weapon": secondary_weapon, "main_weapon_xp": 0, "secondary_weapon_xp": 0, "balance": 0})
 
