@@ -2,7 +2,9 @@
   "modules": {
     "profile": {
       "title": "Project Ax Profiles",
-      "commands": ""
+      "commands": [
+        "{0}"
+      ]
     },
     "inventory": {
       "title": "Project Ax Inventory",
@@ -19,9 +21,7 @@
     "configuration": {
       "title": "Project Ax Configuration",
       "commands": [
-        "{0}prefix",
-        "",
-        ""
+        "{0}prefix"
       ]
     },
     "bot_admin_only": {
@@ -35,10 +35,17 @@
       "commands": [
         "{0}"
       ]
+    },
+    "help": {
+      "title": "Project Ax Help",
+      "commands": [
+        "{0}help",
+        "{0}module"
+      ]
     }
   },
 
-  "commands":{
+  "commands": {
     "prefix": {
       "cmd": "prefix",
       "desc": "Changes the bot's prefix. Do `ax prefix ax` or `ax prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`",

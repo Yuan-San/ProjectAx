@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 import discord
-from tools import _db
+from tools import _db, _json
 
 intents = discord.Intents.default()
 intents.members = True
@@ -81,14 +81,46 @@ def dummy_stat_embed_2(a, b):
 
     return em
 
+def help_module_embed(title, cmdList, url, p):
+    em = discord.Embed(color = 0xadcca6, title=title)
+    em.add_field(name="Commands", value=cmdList)
+    em.set_thumbnail(url=url)
+    em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
+
+    return em
+
+def help_command_embed(title, desc, perms, uL):
+    em = discord.Embed(color = 0xadcca6, title=title, description=desc)
+    em.add_field(name="Permissions", value=perms, inline=False)
+    em.add_field(name="Usage", value=uL, inline=False)
+
+    return em
+
+def help_embed(p):
+     em = discord.Embed(color = 0xadcca6, title="Project Ax")
+     em.add_field(name="Profile", value="`Profile` - Create & manage your profile\n`Inventory` - Check your inventory or vault")
+     em.add_field(name="Combat", value="`Training` - Try out your stats & items", inline=False)
+     em.add_field(name="Bot Configuration", value="`Configuration`\n`Bot Admin Only`\n`Miscellaneous`\n`Help`", inline=False)
+     em.set_footer(text = f"do \"{p}help <module>\" to see all commands in a module.")
+     em.set_thumbnail(url = _json.get_art()["bot_icon_longsword"])
+
+     return em
+
 
 
 # errors
 def error_1(a, b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Something went wrong.")
-
     return em
+
 def error_2(a,b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** The command was canceled.")
+    return em
 
+def error_3(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Couldn't find that command.")
+    return em
+
+def error_4(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Couldn't find that module.")
     return em

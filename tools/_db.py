@@ -9,7 +9,6 @@ db = dbclient[os.getenv('DBSTRING2')]
 
 def get_prefix(id):
     for b in db["Prefix"].find({"server_id": id}):
-        print(b)
         prefix = b["prefix"]
         return prefix
 
