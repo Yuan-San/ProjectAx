@@ -16,7 +16,7 @@ class Help(commands.Cog):
 
     @commands.group(invoke_without_command=True, aliases=['h'])
     async def help(self, ctx):
-      p = _db.get_prefix(ctx.message.guild.id)
+      p = _db.get_prefix(ctx.message.author.id)
 
       em = discord.Embed(color = 0xadcca6, title="Project Ax")
 
@@ -24,7 +24,7 @@ class Help(commands.Cog):
       em.set_footer(text = f"do \"{p}help <module>\" to see all commands in a module.")
       em.set_thumbnail(url = "https://media.discordapp.net/attachments/839537047470473227/840579240088043560/pixil-frame-0_40.png?width=425&height=425")
       await ctx.send(embed = em)
-    
+
     # list of modules;
     @help.command(aliases=['configuration'])
     async def config(self, ctx):
@@ -44,7 +44,7 @@ class Help(commands.Cog):
       em.add_field(name="Commands", value=f"`{p}createprofile` / `{p}cp`\n`{p}profile` / `{p}p`")
       em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
       em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)  
+      await ctx.send(embed=em)
 
     @help.command(aliases=['misc'])
     async def miscellaneous(self, ctx):
@@ -54,7 +54,7 @@ class Help(commands.Cog):
       em.add_field(name="Commands", value=f"`{p}ping`\n`{p}invite`\n`{p}readme`\n`{p}say`\n`{p}stats`")
       em.set_thumbnail(url="https://media.discordapp.net/attachments/839537047470473227/840563743284133908/pixil-frame-0_37.png?width=425&height=425")
       em.set_footer(text=f"do \"{p}help <command>\" to see the details of a command.")
-      await ctx.send(embed=em)  
+      await ctx.send(embed=em)
 
     @help.command(aliases=['botadmin', 'botadminonly', 'admin', 'bot', 'owneronly', 'adminonly'])
     async def admin_only(self, ctx):
@@ -83,7 +83,7 @@ class Help(commands.Cog):
 
       em = discord.Embed(title = "`createprofile` / `cp`", description = "Create a Project Ax profile!", color = 0xadcca6)
       em.add_field(name = "Usage", value = f"`{p}createprofile`\n`{p}cp`\n`{p}cprofile`", inline=False)
-      
+
       await ctx.send(embed = em)
 
     @help.command(aliases=['p'])
@@ -94,7 +94,7 @@ class Help(commands.Cog):
       em.add_field(name = "Usage", value = f"`{p}profile`\n`{p}p`", inline=False)
 
       await ctx.send(embed = em)
-    
+
     @help.command()
     async def ping(self, ctx):
       p = _db.get_prefix(ctx.message.guild.id)
@@ -103,7 +103,7 @@ class Help(commands.Cog):
       em.add_field(name = "Usage", value = f"`{p}prefix`", inline=False)
 
       await ctx.send(embed = em)
-    
+
     @help.command()
     async def invite(self, ctx):
       p = _db.get_prefix(ctx.message.guild.id)
@@ -112,7 +112,7 @@ class Help(commands.Cog):
       em.add_field(name = "Usage", value = f"`{p}invite`", inline=False)
 
       await ctx.send(embed = em)
-    
+
     @help.command(aliases=['docs'])
     async def readme(self, ctx):
       p = _db.get_prefix(ctx.message.guild.id)
@@ -140,7 +140,7 @@ class Help(commands.Cog):
       em.add_field(name = "Usage", value = f"`{p}stats`", inline=False)
 
       await ctx.send(embed = em)
-    
+
     @help.command()
     async def die(self, ctx):
       p = _db.get_prefix(ctx.message.guild.id)
@@ -160,7 +160,7 @@ class Help(commands.Cog):
       em.add_field(name = "Usage", value = f"`{p}delprofile 387984284734062592`", inline=False)
 
       await ctx.send(embed = em)
-  
+
     @help.command(aliases=['editp', 'eprofile'])
     async def editprofile(self, ctx):
       p = _db.get_prefix(ctx.message.guild.id)

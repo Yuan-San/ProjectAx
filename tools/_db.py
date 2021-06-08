@@ -8,8 +8,8 @@ dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
 def get_prefix(id):
-    for b in (db["Prefix"].find({"server_id": id})): prefix = b["prefix"]
-    return prefix
+    for b in (db["Prefix"].find({"server_id": id})):
+        return b["prefix"]
 
 
 def create_inventory(id, main_weapon, secondary_weapon):
