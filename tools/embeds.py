@@ -44,10 +44,10 @@ def inventory_weapon(weapon, desc, thumbnail, p):
 
     return em
 
-def pve_combat_embed(p_hp, p_weapon, p_dmg, p_acc, p_def, p_spd, e_hp, thumbnail, title, enemy, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, beta):
+def pvp_combat_embed(p_hp, e_hp, thumbnail, title, enemy, player, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, beta):
     em=discord.Embed(color=0xadcca6)
     em.set_author(name=title)
-    em.add_field(name=f"{player_move_indicator}You {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
+    em.add_field(name=f"{player_move_indicator}{player} {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
     em.add_field(name=f"{enemy_move_indicator}{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
 
     if not beta:
@@ -105,6 +105,9 @@ def help_embed(p):
      em.set_thumbnail(url = _json.get_art()["bot_icon_longsword"])
 
      return em
+
+
+def pvp_message(m, n): return f"**{m}**, {n} challenged you to a friendly PvP battle!"
 
 
 

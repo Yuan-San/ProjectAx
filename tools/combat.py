@@ -12,7 +12,7 @@ db = dbclient[os.getenv('DBSTRING2')]
 
 def get_player_stats(weapon):
     for b in db["WeaponStats"].find({"_id": weapon}):
-        return (b["damage"], b["accuracy"], b["defence"], b["speed"])
+        return (b["damage"], b["accuracy"], b["defence"])
 
 def get_weapon_emote_id(weapon):
     return _json.get_art()[f"{weapon}_emote_id"]
@@ -102,3 +102,25 @@ def get_winner_message(a, winner):
             return "You won. Congrats!"
 
     return "?"
+
+
+async def weapon_select(target, pvp_message, clientFetch):
+    await pvp_message.edit(content=f"**{target.display_name}**, which weapon do you want to pick for battle?")
+
+    primary_emote = clientFetch.get_emoji(_json.get_emote_id(get_weapons(target.id)[0]))
+    secondary_emote = clientFetch.get_emoji(_json.get_emote_id(get_weapons(target.id)[1]))
+
+    await pvp_message.add_reaction(emoji=primary_emote)
+    await pvp_message.add_reaction(emoji=secondary_emote)
+    await pvp_message.add_reaction(emoji='🛑')
+
+    def checkforR(reaction, msg):
+        return msg == target and reaction.emoji in [primary_emote, secondary_emote, '🛑']
+
+    reaction, msg = await clientFetch.wait_for('reaction_add', timeout=30, check=checkforR)
+
+    if reaction.emoji == primary_emote: return get_weapons(target.id)[0]
+    elif reaction.emoji == secondary_emote: return get_weapons(target.id)[1]
+    elif reaction.emoji == '🛑':
+        await ctx.send(embed=embeds.error_2(target.name, target.discriminator))
+        return

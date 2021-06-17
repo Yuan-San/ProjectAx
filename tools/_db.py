@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 from tools import _json
+import discord
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -53,7 +54,7 @@ def get_weapon_stats(weapon, stat):
         return b[stat]
 
 def get_weapon_stats_list(weapon):
-    return f"Damage: {get_weapon_stats(weapon, 'damage')}\nAccuracy: {get_weapon_stats(weapon, 'accuracy')}%\nDefence: {get_weapon_stats(weapon, 'defence')}%\nSpeed: {get_weapon_stats(weapon, 'speed')}00ms"
+    return f"Damage: {get_weapon_stats(weapon, 'damage')}\nAccuracy: {get_weapon_stats(weapon, 'accuracy')}%\nDefence: {get_weapon_stats(weapon, 'defence')}%"
 
 def get_profile_looks(id):
     for b in db["Profile"].find({"_id": id}):
@@ -66,3 +67,7 @@ def get_training_status(id):
 def get_dummy_stats(id, stat):
     for b in db["Training"].find({"_id": id}):
         return b[stat]
+
+async def profile_check(id):
+    check = db["Profile"].count_documents({"_id": id})
+    return check
