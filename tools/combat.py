@@ -103,6 +103,15 @@ def get_winner_message(a, winner):
 
     return "?"
 
+def pvp_atk(e_hp, p_atk, p_acc, e_def, player):
+    beforeATK = e_hp
+    e_hp = attack(p_atk, p_acc, e_def, float(e_hp))
+
+    if beforeATK == e_hp:
+        return e_hp, f"{player} missed!"
+    else:
+        return e_hp, f"{player} hit! The total damage done is {beforeATK - e_hp}"
+
 
 async def weapon_select(target, pvp_message, clientFetch):
     await pvp_message.edit(content=f"**{target.display_name}**, which weapon do you want to pick for battle?")

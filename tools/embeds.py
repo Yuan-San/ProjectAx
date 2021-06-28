@@ -44,11 +44,14 @@ def inventory_weapon(weapon, desc, thumbnail, p):
 
     return em
 
-def pvp_combat_embed(p_hp, e_hp, thumbnail, title, enemy, player, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, beta):
+
+
+
+def pvp_combat_embed(p_hp, p_atk, p_acc, p_def, e_hp, e_atk, e_acc, e_def, thumbnail, title, enemy, player, comment, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, beta):
     em=discord.Embed(color=0xadcca6)
-    em.set_author(name=title)
-    em.add_field(name=f"{player_move_indicator}{player} {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"hp: {int(p_hp)}", inline=False)
-    em.add_field(name=f"{enemy_move_indicator}{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"hp: {int(e_hp)}", inline=False)
+    # em.set_author(name=title)
+    em.add_field(name=f"{player_move_indicator}{player} {hit_or_miss_p} {miss_counter_p}{hit_counter_p}", value=f"HP: {int(p_hp)}\nATK: {p_atk}\nACC: {p_acc}\nDEF: {p_def}\n---------------------", inline=True)
+    em.add_field(name=f"{enemy_move_indicator}{enemy} {hit_or_miss_d} {miss_counter_d}{hit_counter_d}", value=f"HP: {int(e_hp)}\nATK: {e_atk}\nACC: {e_acc}\nDEF: {e_def}", inline=True)
 
     if not beta:
         em.set_footer(text=f"Prax Bèta; Testing - Moves: {moves}")
@@ -56,6 +59,9 @@ def pvp_combat_embed(p_hp, e_hp, thumbnail, title, enemy, player, hit_or_miss_p,
     em.set_thumbnail(url=thumbnail)
 
     return em
+
+
+
 
 def pve_combat_embed_winner(p_hp, e_hp, thumbnail, title, enemy, winner):
     em=discord.Embed(color=0xadcca6, title=winner)
@@ -99,9 +105,9 @@ def help_command_embed(title, desc, perms, uL):
 def help_embed(p):
      em = discord.Embed(color = 0xadcca6, title="Project Ax")
      em.add_field(name="Profile", value="`Profile` - Create & manage your profile\n`Inventory` - Check your inventory or vault")
-     em.add_field(name="Combat", value="`Training` - Try out your stats & items", inline=False)
-     em.add_field(name="Bot Configuration", value="`Configuration`\n`Bot Admin Only`\n`Miscellaneous`\n`Help`", inline=False)
-     em.set_footer(text = f"do \"{p}help <module>\" to see all commands in a module.")
+     em.add_field(name="Combat", value="`Training` - Try out your stats & items\n`PvP` - Challenge your friends", inline=False)
+     em.add_field(name="Bot Configuration", value="`Configuration` - Configure the bot's settings\n`Miscellaneous` - Get some universal bot information\n`Help` - View all the help commands", inline=False)
+     em.set_footer(text = f"do \"{p}cmds <module>\" to see all commands in a module.")
      em.set_thumbnail(url = _json.get_art()["bot_icon_longsword"])
 
      return em

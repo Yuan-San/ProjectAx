@@ -31,7 +31,7 @@ class Help(commands.Cog):
     async def module_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'param':
-                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.author.id)))
+                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
         else:
             await ctx.send(embed=embeds.error_4(ctx.author.name, ctx.author.discriminator))
 
@@ -57,7 +57,7 @@ class Help(commands.Cog):
     async def help_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'param':
-                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.author.id)))
+                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
         else:
             await ctx.send(embed=embeds.error_3(ctx.author.name, ctx.author.discriminator))
 
