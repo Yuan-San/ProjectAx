@@ -60,6 +60,13 @@
   },
 
   "commands": {
+    "no_command_data": {
+      "desc": "Oops! Looks like there's no JSON data for this command - I can't find a description.",
+      "perms": "None",
+      "usage": [
+        "No JSON data - I can't find a usage."
+      ]
+    },
     "prefix": {
       "desc": "Changes the bot's prefix. Do `ax prefix ax` or `ax prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`",
       "perms": "ManageGuild Permission",

@@ -1,7 +1,7 @@
 import os
 
 def get_version():
-    return "v1.2.23-a"
+    return "v1.3.0-a"
 
 def get_target(target, id):
     if target is None: target = id

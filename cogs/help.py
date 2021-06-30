@@ -41,13 +41,16 @@ class Help(commands.Cog):
         p = _db.get_prefix(ctx.message.guild.id)
 
         botCommand = self.client.get_command(param.lower())
-        command = _json.get_help()["commands"][str(botCommand)]
+
+        try:
+            command = _json.get_help()["commands"][str(botCommand)]
+        except:
+            command = _json.get_help()["commands"]["no_command_data"]
 
         uL = ""
         for usage in command["usage"]:
             uL += "`" + usage.replace("{0}", str(p)) + "`\n"
 
-        # cmds = command["cmd"].split(' ')
         cmds = botCommand.aliases
         cL = "`" + str(botCommand) + "`"
         for cmd in cmds:
