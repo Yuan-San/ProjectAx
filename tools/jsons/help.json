@@ -3,13 +3,14 @@
     "profile": {
       "title": "Project Ax Profiles",
       "commands": [
-        "{0}"
+        "{0}createprofile",
+        "{0}profile"
       ]
     },
     "inventory": {
       "title": "Project Ax Inventory",
       "commands": [
-        "{0}"
+        "{0}inventory"
       ]
     },
     "training": {
@@ -24,16 +25,29 @@
         "{0}prefix"
       ]
     },
+    "pvp": {
+      "title": "Project Ax PvP",
+      "commands": [
+        "{0}pvp"
+      ]
+    },
     "bot_admin_only": {
       "title": "Project Ax Bot Admin",
       "commands": [
-        "{0}"
+        "{0}editprofile",
+        "{0}delprofile",
+        "{0}die"
       ]
     },
     "miscellaneous": {
       "title": "Project Ax Misc",
       "commands": [
-        "{0}"
+        "{0}ping",
+        "{0}invite",
+        "{0}readme",
+        "{0}say",
+        "{0}stats",
+        "{0}version"
       ]
     },
     "help": {
@@ -52,6 +66,17 @@
       "perms": "ManageGuild Permission",
       "usage": [
         "{0}prefix"
+      ]
+    },
+    "createprofile": {
+      "cmd": "createprofile cp cprofile createp",
+      "desc": "Create a Project Ax profile, this is required to use almost all bot commands.",
+      "perms": "None",
+      "usage": [
+        "{0}createprofile",
+        "{0}cp",
+        "{0}cprofile",
+        "{0}createp"
       ]
     }
   }

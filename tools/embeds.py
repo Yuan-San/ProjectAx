@@ -97,7 +97,9 @@ def help_module_embed(title, cmdList, url, p):
 
 def help_command_embed(title, desc, perms, uL):
     em = discord.Embed(color = 0xadcca6, title=title, description=desc)
-    em.add_field(name="Permissions", value=perms, inline=False)
+
+    if perms != "None":
+        em.add_field(name="Permissions", value=perms, inline=False)
     em.add_field(name="Usage", value=uL, inline=False)
 
     return em

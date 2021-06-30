@@ -380,20 +380,6 @@ class profile(commands.Cog):
     async def editprofile_error(self, ctx, error):
         em=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong, please try again.")
         await ctx.send(embed=em)
-
-    @commands.command()
-    @commands.is_owner()
-    async def insert_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
-      collection = db["WeaponStats"]
-      collection.insert_one({"_id": weapon, "damage": damage, "accuracy": accuracy, "defence": defence, "speed": speed})
-      await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Added weapon ({weapon}) to the database.\nDamaga: {damage}\nAccuracy: {accuracy}\nDefence: {defence}\nSpeed: {speed}"))
-
-    @commands.command()
-    @commands.is_owner()
-    async def update_weapon(self, ctx, weapon: str, damage: int, accuracy: int, defence: int, speed: int):
-      collection = db["WeaponStats"]
-      collection.update_one({"_id": weapon}, {"$set":{"damage": damage, "accuracy": accuracy, "defence": defence, "speed": speed}})
-      await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Updated weapon ({weapon}) database.\nDamaga: {damage}\nAccuracy: {accuracy}\nDefence: {defence}\nSpeed: {speed}"))
-
+        
 def setup(client):
     client.add_cog(profile(client))
