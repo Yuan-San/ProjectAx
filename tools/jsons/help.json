@@ -33,6 +33,29 @@
         "{0}cprofile",
         "{0}createp"
       ]
+    },
+    "editprofile": {
+      "desc": "Edit a value of someone's profile. Values to change are; `age`, `first_name`, `last_name`, `gender`, `height`, `looks`, `world`, `district`, `friend_id`, `xp`",
+      "perms": "Bot Admin",
+      "usage": [
+        "{0}editprofile @Dok first_name Willy",
+        "{0}editprofile @JuicyBblue age 17"
+      ]
+    },
+    "delprofile": {
+      "desc": "Deletes a Project Ax profile, *you can only use this command with ID*",
+      "perms": "Bot Admin",
+      "usage": [
+        "{0}delprofile 387984284734062592"
+      ]
+    },
+    "die": {
+      "desc": "Shuts down the bot. Add a \"pull\" parameter to pull new changes from Project Ax's GitHub.",
+      "perms": "Bot Admin",
+      "usage": [
+        "{0}die",
+        "{0}die pull"
+      ]
     }
   }
 }
