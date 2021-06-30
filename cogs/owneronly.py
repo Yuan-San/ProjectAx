@@ -13,10 +13,10 @@ load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
-class ownerOnly(commands.Cog):
+class owneronly(commands.Cog):
     def __init__(self, client):
         self.client = client
-    
+
     @commands.Cog.listener()
     async def on_ready(self):
       print ('owneronly.py -> on_ready()')
@@ -67,4 +67,4 @@ class ownerOnly(commands.Cog):
         await ctx.send("Error: you're not bot owner.")
 
 def setup(client):
-    client.add_cog(ownerOnly(client))
+    client.add_cog(owneronly(client))

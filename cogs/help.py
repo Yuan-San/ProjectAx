@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import cog
 from tools import _db, _json, embeds
 
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents=intents)
 
-class Help(commands.Cog):
+class help(commands.Cog):
     def __init__(self, client):
         self.client = client
 
@@ -20,13 +21,16 @@ class Help(commands.Cog):
         p = _db.get_prefix(ctx.message.guild.id)
 
         botCog = [i for i in _json.get_help()["modules"] if i.lower().startswith(param.lower())]
-        module = _json.get_help()["modules"][str(botCog[0])]
+        module = _json.get_help()["modules"][botCog[0]]
+        cog = self.client.get_cog(botCog[0])
 
         cmdList = ""
-        for cmd in module["commands"]:
-            cmdList += "`" + cmd.replace("{0}", str(p)) + "`\n"
+        for cmd in cog.get_commands():
+            cmdList += "`" + str(p) + str(cmd) + "`\n"
 
-        em = embeds.help_module_embed(module["title"], cmdList, _json.get_art()["bot_icon_greatsword"], p)
+        title = f"Project Ax {botCog[0].capitalize()}"
+
+        em = embeds.help_module_embed(title, cmdList, _json.get_art()["bot_icon_greatsword"], p)
         await ctx.send(embed=em)
 
     @module.error
@@ -71,4 +75,4 @@ class Help(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Help(client))
+    client.add_cog(help(client))

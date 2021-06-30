@@ -12,13 +12,13 @@ load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
-class Admin(commands.Cog):
+class configuration(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     @commands.Cog.listener()
     async def on_ready(self):
-      print ('admin.py -> on_ready()')
+      print ('configuration.py -> on_ready()')
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -54,4 +54,4 @@ class Admin(commands.Cog):
           await ctx.send(embed=em)
 
 def setup(client):
-    client.add_cog(Admin(client))
+    client.add_cog(configuration(client))

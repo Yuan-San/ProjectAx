@@ -1,62 +1,12 @@
 {
   "modules": {
-    "profile": {
-      "title": "Project Ax Profiles",
-      "commands": [
-        "{0}createprofile",
-        "{0}profile"
-      ]
-    },
-    "inventory": {
-      "title": "Project Ax Inventory",
-      "commands": [
-        "{0}inventory"
-      ]
-    },
-    "training": {
-      "title": "Project Ax Training",
-      "commands": [
-        "{0}"
-      ]
-    },
-    "configuration": {
-      "title": "Project Ax Configuration",
-      "commands": [
-        "{0}prefix"
-      ]
-    },
-    "pvp": {
-      "title": "Project Ax PvP",
-      "commands": [
-        "{0}pvp"
-      ]
-    },
-    "owneronly": {
-      "title": "Project Ax Bot Admin",
-      "commands": [
-        "{0}editprofile",
-        "{0}delprofile",
-        "{0}die"
-      ]
-    },
-    "miscellaneous": {
-      "title": "Project Ax Misc",
-      "commands": [
-        "{0}ping",
-        "{0}invite",
-        "{0}readme",
-        "{0}say",
-        "{0}stats",
-        "{0}version"
-      ]
-    },
-    "help": {
-      "title": "Project Ax Help",
-      "commands": [
-        "{0}help",
-        "{0}module"
-      ]
-    }
+    "profile": "",
+    "inventory": "",
+    "configuration": "",
+    "pvp": "",
+    "owneronly": "",
+    "miscellaneous": "",
+    "help": ""
   },
 
   "commands": {

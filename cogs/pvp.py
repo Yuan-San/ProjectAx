@@ -16,7 +16,7 @@ load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
 db = dbclient[os.getenv('DBSTRING2')]
 
-class training(commands.Cog):
+class pvp(commands.Cog):
     def __init__(self, client):
         self.client = client
 
@@ -166,4 +166,4 @@ class training(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(training(client))
+    client.add_cog(pvp(client))
