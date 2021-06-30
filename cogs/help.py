@@ -18,7 +18,9 @@ class Help(commands.Cog):
     @commands.command(aliases=['modules', "mdls", "mdl", 'cmds', 'cmd'])
     async def module(self, ctx, param):
         p = _db.get_prefix(ctx.message.guild.id)
-        module = _json.get_help()["modules"][param]
+
+        botCog = [i for i in _json.get_help()["modules"] if i.lower().startswith(param)]
+        module = _json.get_help()["modules"][str(botCog[0])]
 
         cmdList = ""
         for cmd in module["commands"]:

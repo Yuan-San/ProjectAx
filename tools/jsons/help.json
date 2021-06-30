@@ -31,7 +31,7 @@
         "{0}pvp"
       ]
     },
-    "bot_admin_only": {
+    "owneronly": {
       "title": "Project Ax Bot Admin",
       "commands": [
         "{0}editprofile",
