@@ -61,7 +61,6 @@
 
   "commands": {
     "prefix": {
-      "cmd": "prefix",
       "desc": "Changes the bot's prefix. Do `ax prefix ax` or `ax prefix default` to change it back to the default one. To see the bot's current prefix, do `@ProjectAx prefix`",
       "perms": "ManageGuild Permission",
       "usage": [
@@ -69,7 +68,6 @@
       ]
     },
     "createprofile": {
-      "cmd": "createprofile cp cprofile createp",
       "desc": "Create a Project Ax profile, this is required to use almost all bot commands.",
       "perms": "None",
       "usage": [

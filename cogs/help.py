@@ -39,15 +39,18 @@ class Help(commands.Cog):
     @commands.command(aliases=['h'])
     async def help(self, ctx, param):
         p = _db.get_prefix(ctx.message.guild.id)
-        command = _json.get_help()["commands"][param]
+
+        botCommand = self.client.get_command(param.lower())
+        command = _json.get_help()["commands"][str(botCommand)]
 
         uL = ""
         for usage in command["usage"]:
             uL += "`" + usage.replace("{0}", str(p)) + "`\n"
 
-        cmds = command["cmd"].split(' ')
-        cL = "`" + cmds[0] + "`"
-        for cmd in cmds[1:]:
+        # cmds = command["cmd"].split(' ')
+        cmds = botCommand.aliases
+        cL = "`" + str(botCommand) + "`"
+        for cmd in cmds:
             cL += " / `" + cmd + "`"
 
         em = embeds.help_command_embed(cL, command["desc"], command["perms"], uL)
