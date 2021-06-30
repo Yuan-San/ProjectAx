@@ -56,6 +56,89 @@
         "{0}die",
         "{0}die pull"
       ]
+    },
+    "profile": {
+      "desc": "Displays your Project Ax profile. *Add a user parameter to see someone else's profile.*",
+      "perms": "None",
+      "usage": [
+        "{0}profile",
+        "{0}p @Dok"
+      ]
+    },
+    "inventory": {
+      "desc": "Displays your Project Ax inventory. *Add a user parameter to see someone else's profile.*",
+      "perms": "None",
+      "usage": [
+        "{0}inventory",
+        "{0}inv @Dok"
+      ]
+    },
+    "pvp": {
+      "desc": "Challenge someone to combat!",
+      "perms": "None",
+      "usage": [
+        "{0}pvp @Dok"
+      ]
+    },
+    "ping": {
+      "desc": "Check the bot's ping. *self.client.latency*",
+      "perms": "None",
+      "usage": [
+        "{0}ping"
+      ]
+    },
+    "invite": {
+      "desc": "Get an invite link to invite Project Ax to your server!",
+      "perms": "None",
+      "usage": [
+        "{0}invite"
+      ]
+    },
+    "readme": {
+      "desc": "Project Ax Documentation.",
+      "perms": "None",
+      "usage": [
+        "{0}readme",
+        "{0}docs"
+      ]
+    },
+    "say": {
+      "desc": "Make the bot repeat some plain text.",
+      "perms": "None",
+      "usage": [
+        "{0}say Hi"
+      ]
+    },
+    "stats": {
+      "desc": "View some basic bot stats.",
+      "perms": "None",
+      "usage": [
+        "{0}stats"
+      ]
+    },
+    "version": {
+      "desc": "View the bot's version.",
+      "perms": "None",
+      "usage": [
+        "{0}version",
+        "{0}v"
+      ]
+    },
+    "help": {
+      "desc": "Get information about a specific command and how to use it.",
+      "perms": "None",
+      "usage": [
+        "{0}help profile",
+        "{0}h die"
+      ]
+    },
+    "module": {
+      "desc": "Get a list of all the commands in a module.",
+      "perms": "None",
+      "usage": [
+        "{0}cmds misc",
+        "{0}module configuration"
+      ]
     }
   }
 }
