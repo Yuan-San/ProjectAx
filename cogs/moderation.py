@@ -23,7 +23,9 @@ class moderation(commands.Cog):
 
     @commands.command(aliases=['b'])
     @commands.has_permissions(ban_members=True)
+    @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, target: discord.Member, *, reason=None):
+
         if reason==None: reason = "*No reason given*"
         actualReason = ctx.author.name + "#" + ctx.author.discriminator + " | " + str(reason)
 
@@ -31,13 +33,17 @@ class moderation(commands.Cog):
             await ctx.send(embed=embeds.error_5(ctx.author.name, ctx.author.discriminator))
             return
 
-        try:
-            await ctx.guild.ban(target, reason=actualReason)
-        except:
-            await ctx.send(embed=embeds.error_5(ctx.author.name, ctx.author.discriminator))
-            return
+        await ctx.guild.ban(target, reason=actualReason)
 
         await ctx.send(embed=embeds.ban_success(ctx.author.name, ctx.author.discriminator, target, reason))
+
+    # @ban.error
+    # async def ban_error(self, ctx, error):
+    #     if isinstance(error, commands.MemberNotFound):
+    #         bt = await self.client.fetch_user(int(target))
+    #         await ctx.guild.ban(bt, reason=actualReason)
+    #         await ctx.send(embed=embeds.ban_success(ctx.author.name, ctx.author.discriminator, bt, reason))
+
 
 
 

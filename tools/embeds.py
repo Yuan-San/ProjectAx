@@ -125,6 +125,29 @@ def ban_success(a, b, target, reason):
 
     return em
 
+def MRA_error(a, b, p):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** You're missing a required argument. Please try again.")
+    em.set_footer(text=f"do \"{p}help <command>\" to see more info about this command.")
+
+    return em
+
+def MP_error(a, b, p):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** You don't have permissions to run this command.")
+    em.set_footer(text=f"do \"{p}help <command>\" to see more info about this command.")
+
+    return em
+
+def BMP_error(a, b, p):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I don't have permissions to run this command. Change the bot's permissions in server settings and try again.")
+    em.set_footer(text=f"do \"{p}help <command>\" to see more info about this command.")
+
+    return em
+
+def BA_error(a, b, p):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Looks like you're using an invalid argument, try again.")
+    em.set_footer(text=f"do \"{p}help <command>\" to see more info about this command.")
+
+    return em
 
 
 
