@@ -275,8 +275,8 @@ class profile(commands.Cog):
         world=b["world"]
         xp = b["xp"]
 
-      main_weapon = _db.get_weapons(ctx.message.author.id)[0]
-      secondary_weapon = _db.get_weapons(ctx.message.author.id)[1]
+      main_weapon = _db.get_weapons(target)[0]
+      secondary_weapon = _db.get_weapons(target)[1]
 
       em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
       em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {friend_id}", inline=False)

@@ -107,8 +107,8 @@ def help_command_embed(title, desc, perms, uL):
 def help_embed(p):
      em = discord.Embed(color = 0xadcca6, title="Project Ax")
      em.add_field(name="Profile", value="`Profile` - Create & manage your profile\n`Inventory` - Check your inventory or vault")
-     em.add_field(name="Combat", value="`Training` - Try out your stats & items\n`PvP` - Challenge your friends", inline=False)
-     em.add_field(name="Bot Configuration", value="`Configuration` - Configure the bot's settings\n`Miscellaneous` - Get some universal bot information\n`Help` - View all the help commands", inline=False)
+     em.add_field(name="Combat", value="`PvP` - Challenge your friends", inline=False)
+     em.add_field(name="Bot Configuration", value="`Configuration` - Configure the bot's settings\n`Miscellaneous` - Get some universal bot information\n`Moderation` - Moderate your server\n`Help` - View all the help commands", inline=False)
      em.set_footer(text = f"do \"{p}cmds <module>\" to see all commands in a module.")
      em.set_thumbnail(url = _json.get_art()["bot_icon_longsword"])
 
@@ -116,6 +116,15 @@ def help_embed(p):
 
 
 def pvp_message(m, n): return f"**{m}**, {n} challenged you to a friendly PvP battle!"
+
+def ban_success(a, b, target, reason):
+    em=discord.Embed(color=0xadcca6, title=f"User Banned")
+    em.add_field(name="Username & ID", value=f"{target.name}#{target.discriminator}\n{target.id}", inline=False)
+    em.add_field(name="Reason", value=reason, inline=True)
+    em.add_field(name="Moderator", value=f"{a}#{b}", inline=True)
+
+    return em
+
 
 
 
@@ -134,4 +143,8 @@ def error_3(a, b):
 
 def error_4(a, b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Couldn't find that module.")
+    return em
+
+def error_5(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I couldn't ban that user. Make sure **my role** and **your highest role** are above the highest role of the user you are trying to ban.")
     return em
