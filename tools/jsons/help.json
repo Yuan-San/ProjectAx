@@ -105,7 +105,7 @@
     },
     "say": {
       "desc": "Make the bot repeat some plain text.",
-      "perms": "None",
+      "perms": "ManageGuild",
       "usage": [
         "{0}say Hi"
       ]
