@@ -38,12 +38,14 @@ async def on_ready():
 async def on_command_error(ctx, error):
   if isinstance(error, commands.MissingRequiredArgument):
     await ctx.send(embed=embeds.MRA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  if isinstance(error, commands.MissingPermissions):
+  elif isinstance(error, commands.MissingPermissions):
     await ctx.send(embed=embeds.MP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  if isinstance(error, commands.BotMissingPermissions):
+  elif isinstance(error, commands.BotMissingPermissions):
     await ctx.send(embed=embeds.BMP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  if isinstance(error, commands.BadArgument):
+  elif isinstance(error, commands.BadArgument):
     await ctx.send(embed=embeds.BA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
+  else:
+      await ctx.send(f"Something strange is going on...\nHere's the error;\n```{error}```")
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):

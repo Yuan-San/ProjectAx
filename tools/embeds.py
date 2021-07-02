@@ -119,11 +119,38 @@ def pvp_message(m, n): return f"**{m}**, {n} challenged you to a friendly PvP ba
 
 def ban_success(a, b, target, reason):
     em=discord.Embed(color=0xadcca6, title=f"User Banned")
-    em.add_field(name="Username & ID", value=f"{target.name}#{target.discriminator}\n{target.id}", inline=False)
+    em.add_field(name="Username", value=f"{target.name}#{target.discriminator}", inline=False)
     em.add_field(name="Reason", value=reason, inline=True)
     em.add_field(name="Moderator", value=f"{a}#{b}", inline=True)
 
     return em
+
+def unban_success(a, b, target):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** User {target.name}#{target.discriminator} with id `{target.id}` was successfully unbanned.")
+
+    return em
+
+def kick_success(a, b, target, reason):
+    em=discord.Embed(color=0xadcca6, title=f"User Kicked")
+    em.add_field(name="Username", value=f"{target.name}#{target.discriminator}", inline=False)
+    em.add_field(name="Reason", value=reason, inline=True)
+    em.add_field(name="Moderator", value=f"{a}#{b}", inline=True)
+
+    return em
+
+def softban_success(a, b, target, reason):
+    em=discord.Embed(color=0xadcca6, title=f"User Softbanned")
+    em.add_field(name="Username", value=f"{target.name}#{target.discriminator}", inline=False)
+    em.add_field(name="Reason", value=reason, inline=True)
+    em.add_field(name="Moderator", value=f"{a}#{b}", inline=True)
+
+    return em
+
+def warn_success(target):
+    em=discord.Embed(color=0xadcca6, description=f"**User {target.display_name} with ID `{target.id}` was successfully warned.**")
+
+    return em
+
 
 def MRA_error(a, b, p):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** You're missing a required argument. Please try again.")
@@ -170,4 +197,12 @@ def error_4(a, b):
 
 def error_5(a, b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I couldn't ban that user. Make sure **my role** and **your highest role** are above the highest role of the user you are trying to ban.")
+    return em
+
+def error_6(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I couldn't kick that user. Make sure **my role** and **your highest role** are above the highest role of the user you are trying to kick.")
+    return em
+
+def error_7(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I couldn't find a warning with that ID listed, please try again.")
     return em

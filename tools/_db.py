@@ -71,3 +71,18 @@ def get_dummy_stats(id, stat):
 async def profile_check(id):
     check = db["Profile"].count_documents({"_id": id})
     return check
+
+
+
+def warning_doc_check(u_id, s_id):
+    check = db["Warnings"].count_documents({"_id": f"{u_id} @ {s_id}"})
+    return check
+
+def create_warning_log(u_id, s_id):
+    db["Warnings"].insert_one({"_id": f"{u_id} @ {s_id}"})
+
+def get_warning_num(u_id, s_id):
+    for b in db["Warnings"].find({"_id": f"{u_id} @ {s_id}"}):
+        warning_list = list(b.items())
+        warning_list_max = len(warning_list)
+        return warning_list_max
