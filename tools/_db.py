@@ -72,6 +72,13 @@ async def profile_check(id):
     check = db["Profile"].count_documents({"_id": id})
     return check
 
+def get_badges(id):
+    for b in db["Profile"].find({"_id": id}):
+        return b["badges"]
+
+def split_badges(badges):
+    return badges.split(', ')
+
 
 
 def warning_doc_check(u_id, s_id):

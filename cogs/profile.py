@@ -278,11 +278,30 @@ class profile(commands.Cog):
       main_weapon = _db.get_weapons(target)[0]
       secondary_weapon = _db.get_weapons(target)[1]
 
-      em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
+      """ badges """
+      badges_string = ""
+
+      try:
+          badges = _db.get_badges(target)
+          badges = _db.split_badges(badges)
+
+          for i in range(0, len(badges)):
+              badges_string += f"{self.client.get_emoji(_json.get_emote_id(badges[i]))} "
+      except:
+          pass
+
+
+      em=discord.Embed(title=f"{first_name} {last_name} {badges_string}", color = 0xadcca6)
       em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {friend_id}", inline=False)
       em.add_field(name="Region", value=f"World: {world}\nDistrict: {district}", inline=False)
       em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
-      em.set_thumbnail(url=looks)
+
+      try:
+          em.set_thumbnail(url=_json.get_art()[badges[0]])
+      except:
+          pass
+
+
       await ctx.send(embed=em)
 
     @profile.error
