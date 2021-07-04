@@ -86,3 +86,21 @@ def get_warning_num(u_id, s_id):
         warning_list = list(b.items())
         warning_list_max = len(warning_list)
         return warning_list_max
+
+def get_warning(target, w_id, u_id, s_id):
+    for b in db["Warnings"].find({"_id": f"{u_id} @ {s_id}"}):
+        return b[f"warning_{w_id}"]
+
+def split_warning(warning):
+    split_1 = warning.split(' @ ')
+    split_2 = split_1[1].split(' -///- ')
+    split_3 = split_1[0].split(' - ')
+    return split_3[0], split_3[1], split_2[0], split_2[1]
+
+def get_warnings_list(u_id, s_id):
+    num = get_warning_num(u_id, s_id)
+    for b in db["Warnings"].find({"_id": f"{u_id} @ {s_id}"}):
+        warnings = []
+        for i in range(1, num):
+            warnings.append(b[f"warning_{i}"])
+    return warnings
