@@ -45,7 +45,7 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.BadArgument):
     await ctx.send(embed=embeds.BA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
   else:
-      await ctx.send(f"Something strange is going on...\nHere's the error;\n```{error}```")
+      print(f"Something strange is going on...\nHere's the error;\n```{error}```")
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
