@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import cog
 from tools import _db, _json, embeds
+import typing
 
 intents = discord.Intents.default()
 intents.members = True
@@ -17,7 +18,12 @@ class help(commands.Cog):
 
     # modules;
     @commands.command(aliases=['modules', "mdls", "mdl", 'cmds', 'cmd'])
-    async def module(self, ctx, param):
+    async def module(self, ctx, param: typing.Optional[str]):
+
+        if param == None:
+            await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
+            return
+
         p = _db.get_prefix(ctx.message.guild.id)
 
         botCog = [i for i in _json.get_help()["modules"] if i.lower().startswith(param.lower())]
@@ -35,15 +41,16 @@ class help(commands.Cog):
 
     @module.error
     async def module_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'param':
-                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
-        else:
-            await ctx.send(embed=embeds.error_4(ctx.author.name, ctx.author.discriminator))
+        await ctx.send(embed=embeds.error_4(ctx.author.name, ctx.author.discriminator))
 
     # commands
     @commands.command(aliases=['h'])
-    async def help(self, ctx, param):
+    async def help(self, ctx, param: typing.Optional[str]):
+
+        if param == None:
+            await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
+            return
+
         p = _db.get_prefix(ctx.message.guild.id)
 
         botCommand = self.client.get_command(param.lower())
@@ -67,11 +74,7 @@ class help(commands.Cog):
 
     @help.error
     async def help_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'param':
-                await ctx.send(embed=embeds.help_embed(_db.get_prefix(ctx.message.guild.id)))
-        else:
-            await ctx.send(embed=embeds.error_3(ctx.author.name, ctx.author.discriminator))
+        await ctx.send(embed=embeds.error_3(ctx.author.name, ctx.author.discriminator))
 
 
 def setup(client):

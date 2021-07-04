@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import time, datetime
 from discord.ext.commands import MemberConverter
 from tools import _db, _json, tools, embeds
+import typing
 
 intents = discord.Intents.default()
 intents.members = True
@@ -96,6 +97,10 @@ class moderation(commands.Cog):
         if reason==None: reason = "*No reason given*"
         collection = db["Warnings"]
 
+        if target == ctx.author:
+            await ctx.send(embed=embeds.error_8(ctx.author.name, ctx.author.discriminator))
+            return
+
         # check if the target already have a warning log
         if _db.warning_doc_check(target.id, ctx.guild.id) == 0:
             _db.create_warning_log(target.id, ctx.guild.id)
@@ -103,28 +108,69 @@ class moderation(commands.Cog):
         # # check warnings in that log
         warning_num = _db.get_warning_num(target.id, ctx.guild.id)
         # add warning
-        collection.update_one({"_id": f"{target.id} @ {ctx.guild.id}"}, {"$set":{f"warning_{warning_num}": f"{ctx.author.id} @ {time.time()} -///- {reason}"}}, upsert=True)
+        collection.update_one({"_id": f"{target.id} @ {ctx.guild.id}"}, {"$set":{f"warning_{warning_num}": f"{warning_num} - {ctx.author.id} @ {time.time()} -///- {reason}"}}, upsert=True)
 
         # output
         await ctx.send(embed=embeds.warn_success(target))
 
     @commands.command(aliases=['warnings'])
     @commands.has_permissions(kick_members=True)
-    async def warnlog(self, ctx, target: discord.Member):
+    async def warnlog(self, ctx, user: typing.Optional[discord.Member]):
 
-        pass
+        if user != None: target = user.id
+        else: target = ctx.author.id
+
+        # check if there's a warnlog for target
+        if _db.warning_doc_check(target, ctx.guild.id) == 0:
+            target = await self.client.fetch_user(int(target))
+            await ctx.send(embed=embeds.error_9(ctx.author.name, ctx.author.discriminator, target))
+            return
+
+        warnings = _db.get_warnings_list(target, ctx.guild.id)
+
+        if len(warnings) > 10:
+            """ if there's more than 10 warnings - Only take the last 10 """
+            warnings = warnings[-10:]
+
+        target = await self.client.fetch_user(int(target))
+
+        em=discord.Embed(color=0xadcca6)
+        em.set_author(name=f"Warnlog for {target.display_name}", icon_url = target.avatar_url)
+        em.set_footer(text="This only shows the latest 10 warnings, all other warnings are saved but not shown.")
+
+
+        # get all warnings + info (splits)
+        for i in reversed(warnings):
+            warning_info = _db.split_warning(i)
+
+            w_time = datetime.datetime.fromtimestamp(int(float(warning_info[2])))
+            mod = await self.client.fetch_user(int(warning_info[1]))
+
+            em.add_field(name=f"{warning_info[0]} — *{w_time}, by {mod}*", value=f"\"{warning_info[3]}\"\n_ _", inline=False)
+
+        await ctx.send(embed=em)
+
 
     @commands.command(aliases=['showw', 'showwarning', 'show_warning'])
     @commands.has_permissions(kick_members=True)
-    async def warning(self, ctx, target: discord.Member, w_id: int):
+    async def warning(self, ctx, user: typing.Optional[discord.Member], w_id: int):
 
-        target = tools.get_target(target, ctx.author.id)
+        if user != None: target = user.id
+        else: target = ctx.author.id
 
         try:
-            warning = _db.get_warning(target, w_id)
+            warning = _db.get_warning(target, w_id, target, ctx.guild.id)
         except:
             await ctx.send(embed=embeds.error_7(ctx.author.name, ctx.author.discriminator))
 
+        warning_info = _db.split_warning(warning)
+
+        mod = await self.client.fetch_user(int(warning_info[1]))
+        w_time = datetime.datetime.fromtimestamp(int(float(warning_info[2])))
+        target = await self.client.fetch_user(int(target))
+        av = target.avatar_url
+
+        await ctx.send(embed=embeds.warning_embed(mod, warning_info[3], w_time, target, w_id, av))
 
 
 

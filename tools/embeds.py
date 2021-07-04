@@ -151,6 +151,13 @@ def warn_success(target):
 
     return em
 
+def warning_embed(mod, warning, time, target, w_id, av):
+    em=discord.Embed(color=0xadcca6, description=f"\"{warning}\"")
+    em.set_author(name=f"Warning for {target.display_name} with ID {w_id}", icon_url = av)
+    em.set_footer(text = f"at {time} - moderator: {mod}")
+
+    return em
+
 
 def MRA_error(a, b, p):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** You're missing a required argument. Please try again.")
@@ -205,4 +212,12 @@ def error_6(a, b):
 
 def error_7(a, b):
     em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** I couldn't find a warning with that ID listed, please try again.")
+    return em
+
+def error_8(a, b):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** You can't warn yourself, silly.")
+    return em
+
+def error_9(a, b, target):
+    em=discord.Embed(color=0xadcca6, description=f"**{a}#{b}** Looks like {target.display_name} doesn't have any warnings yet, looks clean boss.")
     return em
