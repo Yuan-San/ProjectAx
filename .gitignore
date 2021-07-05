@@ -9,4 +9,4 @@ cogs/__pycache__/
 tools/__pycache__/
 
 # profiles
-result_profile_*.png
+tools/art/result_profile_*.*
