@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import asyncio
 from tools import _db, _json, tools, embeds
 import random
+from PIL import Image, ImageFont, ImageDraw, ImageFilter
 
 intents = discord.Intents.default()
 intents.members = True
@@ -289,19 +290,47 @@ class profile(commands.Cog):
       except:
           pass
 
-
-      em=discord.Embed(title=f"{first_name} {last_name} {badges_string}", color = 0xadcca6)
-      em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {friend_id}", inline=False)
-      em.add_field(name="Region", value=f"World: {world}\nDistrict: {district}", inline=False)
-      em.add_field(name="Level", value=f"Player Level: `{xp}`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
-
-      try:
-          em.set_thumbnail(url=_json.get_art()[badges[0]])
-      except:
-          pass
+      # try:
+      #     em.set_thumbnail(url=_json.get_art()[badges[0]])
+      # except:
+      #     em.set_thumbnail(url= looks)
 
 
-      await ctx.send(embed=em)
+      """ IMAGE """
+      profile_image = Image.open("tools/art/scroll.png")
+      profile_image_e = ImageDraw.Draw(profile_image)
+
+      u_font = "tools/art/fonts/Charm/Charm-Bold.ttf"
+      title_font = ImageFont.truetype(u_font, 40)
+      l_title_font = ImageFont.truetype(u_font, 25)
+      l_font = ImageFont.truetype(u_font, 15)
+
+      RGB = [37, 39, 43]
+
+      # name + last name
+      profile_image_e.text((70,35), f"{first_name} {last_name}", (RGB[0], RGB[1], RGB[2]), font=title_font)
+
+      # info card
+      profile_image_e.text((70,85), f"Info", (RGB[0], RGB[1], RGB[2]), font=l_title_font)
+      profile_image_e.text((70,115), f"Gender: {gender}\nHeight: {height}\nAge: {age}\nFriend ID: {friend_id}", (RGB[0], RGB[1], RGB[2]), font=l_font)
+
+      # region 
+      profile_image_e.text((70,205), f"Region", (RGB[0], RGB[1], RGB[2]), font=l_title_font)
+      profile_image_e.text((70,235), f"World: {world}\nDistrict: {district}", (RGB[0], RGB[1], RGB[2]), font=l_font)
+
+      # level & weapons info
+      profile_image_e.text((70,275), f"Level", (RGB[0], RGB[1], RGB[2]), font=l_title_font)
+      profile_image_e.text((70,305), f"Player Level: {xp}\nPrimary Weapon: {main_weapon}\nSecondary Weapon: {secondary_weapon}", (RGB[0], RGB[1], RGB[2]), font=l_font)
+
+      if target in  _json.get_config()["owners"]:
+        """ Add Bot Admin Badge """
+        badge_admin = Image.open('tools/art/badge_admin.png')
+        badge_admin = badge_admin.resize((40,40))
+        profile_image.paste(badge_admin, (260,45), badge_admin.convert('RGBA'))
+
+      image = f"tools/art/result_profile_{target}.png"
+      profile_image.save(image)
+      await ctx.send(file=discord.File(image))
 
     @profile.error
     async def profile_error(self, ctx, error):
