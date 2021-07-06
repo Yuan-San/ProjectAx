@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import asyncio
 from tools import _db, embeds, combat, _json, tools
 import asyncio
+from discord_components import DiscordComponents, Button, ButtonStyle, Select, SelectOption
 
 intents = discord.Intents.default()
 intents.members = True
@@ -22,6 +23,7 @@ class pvp(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+      DiscordComponents(self.client)
       print ('pvp.py -> on_ready()')
 
     @commands.command()
@@ -37,27 +39,37 @@ class pvp(commands.Cog):
             return
 
 
+        buttons_1=[
+            Button(style=ButtonStyle.blue, label="Accept"),
+            Button(style=ButtonStyle.red, label="Run Away"),
+        ],
 
-        pvp_message = await ctx.send(embeds.pvp_message(target.display_name, ctx.author.display_name ))
+        pvp_message = await ctx.send(embeds.pvp_message(target.display_name, ctx.author.display_name), components=list(buttons_1))
 
-        await pvp_message.add_reaction(emoji='✅')
-        await pvp_message.add_reaction(emoji='🛑')
-
-        def checkforR(reaction, msg):
-            return msg == target and reaction.emoji in ['✅', '🛑']
-
-        reaction, msg = await self.client.wait_for('reaction_add', timeout=30, check=checkforR)
-        await pvp_message.clear_reactions()
-
-        if reaction.emoji == '🛑':
-            await pvp_message.clear_reactions()
-            latestMsg = pvp_message.content
-            await pvp_message.edit(content=f"{latestMsg}\n**{target.display_name}** ran away!")
+        def checkforR(button, msg):
+            return msg == target and button.name in ["Accept", "Run Away"]
 
 
+        # try:
+        button, msg = await self.client.wait_for("button_click", check=checkforR, timeout=15)
+
+        # except:
+        #     await pvp_message.edit(components=[
+        #         Button(style=ButtonStyle.red, label="Timed Out!", disabled=True),
+        #         ],
+        #     )
+
+        #     return 
+
+
+        if button.name == "Run Away":
+            await pvp_message.edit(
+                f"{pvp_message.content}\n**{target.display_name}** ran away!",
+                components=[]
+            )
 
         ## PLAYER AGREES TO PVP
-        if reaction.emoji == '✅':
+        if button.name == "Accept":
 
             # select weapons
             weapon_p = await combat.weapon_select(ctx.author, pvp_message, self.client)
@@ -65,6 +77,8 @@ class pvp(commands.Cog):
 
             weapon_e = await combat.weapon_select(target, pvp_message, self.client)
             await pvp_message.clear_reactions()
+
+
 
             # get players stats
             # player
