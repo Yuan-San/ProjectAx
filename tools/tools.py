@@ -2,7 +2,7 @@ import os
 import discord
 
 def get_version():
-    return "v1.4.4-a"
+    return "v1.4.5-a"
 
 def get_target(target, id):
     if target is None: target = id

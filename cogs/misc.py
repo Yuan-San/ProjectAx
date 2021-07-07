@@ -71,7 +71,7 @@ class miscellaneous(commands.Cog):
 
     @commands.command(aliases=['v'])
     async def version(self, ctx):
-      em = discord.Embed(color = 0xadcca6, description=f"{tools.get_version()}")
+      em = discord.Embed(color = 0xadcca6, description=f"PraxemSquared: `{tools.get_version()}`\nDiscord: `{discord.__version__}`")
       await ctx.send(embed=em)
 
 # this is the end of the code, type all mod commands above this
