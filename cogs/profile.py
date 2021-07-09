@@ -211,13 +211,10 @@ class profile(commands.Cog):
 
                 user_name = f"{ctx.author.name}#{ctx.author.discriminator}"
 
-                em=discord.Embed(title=f"{first_name} {last_name}", color = 0xadcca6)
-                em.add_field(name="Info Card", value=f"Gender: {gender}\nHeight: {height}\nAge: {age}\n Friend ID: {user_name}", inline=False)
-                em.add_field(name="Region", value="World: Heimur\nDistrict: Svart", inline=False)
-                em.add_field(name="Level", value=f"Player Level: `0`\nPrimary Weapon: `{main_weapon}`\nSecondary Weapon: `{secondary_weapon}`", inline=False)
-                await msg.edit(embed=em)
-
                 collection.update_one({"_id": ctx.message.author.id}, {"$set":{"gender": gender, "looks": looks, "first_name": first_name, "last_name": last_name, "height": height, "world": "Heimur", "district": "Svart", "friend_id": user_name, "age": age, "xp": 0}}, upsert=True)
+
+                await msg.delete()
+                await ctx.invoke(self.client.get_command('profile'), target=ctx.author)
 
                 print()
                 print("----")
