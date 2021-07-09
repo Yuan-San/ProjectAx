@@ -4,7 +4,8 @@ from pymongo import MongoClient
 import os
 import random
 import asyncio
-from tools import _json, embeds, tools
+from tools import _json, embeds, tools, _c
+from discord_components import DiscordComponents, Button, ButtonStyle
 
 load_dotenv('.env')
 dbclient = MongoClient(os.getenv('DBSTRING1'))
@@ -113,23 +114,31 @@ def pvp_atk(e_hp, p_atk, p_acc, e_def, player):
         return e_hp, f"{player} hit! The total damage done is {beforeATK - e_hp}"
 
 
-async def weapon_select(target, pvp_message, clientFetch):
+async def weapon_select(target, pvp_message, clientFetch, ch_id):
     await pvp_message.edit(content=f"**{target.display_name}**, which weapon do you want to pick for battle?")
 
     primary_emote = clientFetch.get_emoji(_json.get_emote_id(get_weapons(target.id)[0]))
     secondary_emote = clientFetch.get_emoji(_json.get_emote_id(get_weapons(target.id)[1]))
 
-    await pvp_message.add_reaction(emoji=primary_emote)
-    await pvp_message.add_reaction(emoji=secondary_emote)
-    await pvp_message.add_reaction(emoji='🛑')
 
-    def checkforR(reaction, msg):
-        return msg == target and reaction.emoji in [primary_emote, secondary_emote, '🛑']
+    buttons = [
+        Button(style=1, label=get_weapons(target.id)[0], emoji=primary_emote),
+        Button(style=1, label=get_weapons(target.id)[1], emoji=secondary_emote),
+        Button(style=4, label=_c.deny())
+    ],
+    await pvp_message.edit(components=list(buttons))
 
-    reaction, msg = await clientFetch.wait_for('reaction_add', timeout=30, check=checkforR)
+    def checkforR(res):
+        return res.user.id == target.id and res.channel.id == ch_id
 
-    if reaction.emoji == primary_emote: return get_weapons(target.id)[0]
-    elif reaction.emoji == secondary_emote: return get_weapons(target.id)[1]
-    elif reaction.emoji == '🛑':
+
+    res = await clientFetch.wait_for("button_click", check=checkforR, timeout=15)
+    await res.respond(type=6)
+
+
+    if  res.component.label.startswith(get_weapons(target.id)[0]): return get_weapons(target.id)[0]
+    elif  res.component.label.startswith(get_weapons(target.id)[1]): return get_weapons(target.id)[1]
+
+    elif  res.component.label == _c.deny():
         await ctx.send(embed=embeds.error_2(target.name, target.discriminator))
         return

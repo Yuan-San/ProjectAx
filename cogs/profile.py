@@ -4,9 +4,10 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from tools import _db, _json, tools, embeds
+from tools import _db, _json, tools, embeds, _c
 import random
 from PIL import Image, ImageFont, ImageDraw, ImageFilter
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
 intents = discord.Intents.default()
 intents.members = True
@@ -44,26 +45,24 @@ class profile(commands.Cog):
         return
 
       em = discord.Embed(color=0xadcca6, description = f"**{ctx.author.name}#{ctx.author.discriminator}** Are you sure you want to create your profile? **You can only do this once, and changing your profile is impossible.**")
-      em.set_footer(text="Please react to this message to confirm.")
 
       first_embed = await ctx.send(embed=em)
 
-      try:
-        await first_embed.add_reaction(emoji='✅')
-        await first_embed.add_reaction(emoji='🛑')
-      except:
-        await ctx.send(embed=discord.Embed(color=0xadcca6, description=f"**{ctx.author.name}#{ctx.author.discriminator}** Something went wrong. Make sure I have permissions to add reactions to messages!"))
-        return
+      buttons_1 = [
+          Button(style=1, label="Yep"),
+          Button(style=4, label="Nope")
+      ],
+      await first_embed.edit(components=buttons_1)
 
       # weapon variables
-      longsword = self.client.get_emoji(841591365649170463)
-      katana = self.client.get_emoji(841591388055273472)
-      dagger = self.client.get_emoji(841591344308158516)
-      greatsword = self.client.get_emoji(841591317368799242)
-      sledgehammer = self.client.get_emoji(841591294115315753)
-      mace =  self.client.get_emoji(841591275567579156)
-      bow = self.client.get_emoji(841631789675053077)
-      longbow = self.client.get_emoji(841592788084326400)
+      longsword = self.client.get_emoji(_json.get_emote_id("longsword"))
+      katana = self.client.get_emoji(_json.get_emote_id("katana"))
+      dagger = self.client.get_emoji(_json.get_emote_id("dagger"))
+      greatsword = self.client.get_emoji(_json.get_emote_id("greatsword"))
+      sledgehammer = self.client.get_emoji(_json.get_emote_id("sledgehammer"))
+      mace =  self.client.get_emoji(_json.get_emote_id("mace"))
+      bow = self.client.get_emoji(_json.get_emote_id("bow"))
+      longbow = self.client.get_emoji(_json.get_emote_id("longbow"))
 
       def checkforR(reaction, msg):
         return msg == ctx.message.author and reaction.emoji in ['✅', '🛑', longsword, katana, dagger, greatsword, sledgehammer, mace, bow, longbow]

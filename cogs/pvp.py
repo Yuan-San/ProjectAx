@@ -5,9 +5,9 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import asyncio
-from tools import _db, embeds, combat, _json, tools
+from tools import _db, embeds, combat, _json, tools, _c
 import asyncio
-from discord_components import DiscordComponents, Button, ButtonStyle, Select, SelectOption
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
 intents = discord.Intents.default()
 intents.members = True
@@ -39,44 +39,47 @@ class pvp(commands.Cog):
             return
 
 
-        buttons_1=[
-            Button(style=ButtonStyle.blue, label="Accept"),
-            Button(style=ButtonStyle.red, label="Run Away"),
+        buttons_1 = [
+            Button(style=1, label=_c.accept(), custom_id="accept_pvp"),
+            Button(style=4, label=_c.deny(), custom_id="deny_pvp")
         ],
+
 
         pvp_message = await ctx.send(embeds.pvp_message(target.display_name, ctx.author.display_name), components=list(buttons_1))
 
-        def checkforR(button, msg):
-            return msg == target and button.name in ["Accept", "Run Away"]
+        def checkforR(res):
+            return res.user.id == target.id and res.channel.id == ctx.channel.id
+
+        try:
+            res = await self.client.wait_for("button_click", check=checkforR, timeout=15)
+            await res.respond(type=6)
+
+        except asyncio.TimeoutError:
+            await _c.timeout_button(pvp_message)
+            return 
 
 
-        # try:
-        button, msg = await self.client.wait_for("button_click", check=checkforR, timeout=15)
+        if res.component.label == _c.deny():
+            await _c.cancel(pvp_message)
+            return
 
-        # except:
-        #     await pvp_message.edit(components=[
-        #         Button(style=ButtonStyle.red, label="Timed Out!", disabled=True),
-        #         ],
-        #     )
-
-        #     return 
-
-
-        if button.name == "Run Away":
-            await pvp_message.edit(
-                f"{pvp_message.content}\n**{target.display_name}** ran away!",
-                components=[]
-            )
-
-        ## PLAYER AGREES TO PVP
-        if button.name == "Accept":
+        if res.component.label == _c.accept():
+            await _c.clear(pvp_message)
 
             # select weapons
-            weapon_p = await combat.weapon_select(ctx.author, pvp_message, self.client)
-            await pvp_message.clear_reactions()
+            try:
+                weapon_p = await combat.weapon_select(ctx.author, pvp_message, self.client, ctx.channel.id)
+                await _c.clear(pvp_message)
 
-            weapon_e = await combat.weapon_select(target, pvp_message, self.client)
-            await pvp_message.clear_reactions()
+                weapon_e = await combat.weapon_select(target, pvp_message, self.client, ctx.channel.id)
+                await _c.clear(pvp_message)
+
+            except asyncio.TimeoutError:
+                await _c.timeout_button(pvp_message)
+                return 
+            except:
+                await _c.cancel(pvp_message)
+                return
 
 
 
@@ -117,19 +120,22 @@ class pvp(commands.Cog):
                 return embeds.pvp_combat_embed(p_hp, p_atk, p_acc, p_def, e_hp, e_atk, e_acc, e_def, thumnail, title, enemy, player, comment, hit_or_miss_p, hit_or_miss_d, miss_counter_p, miss_counter_d, hit_counter_p, hit_counter_d, moves, player_move_indicator, enemy_move_indicator, tools.ismain())
 
             await pvp_message.edit(embed=display_pvp_embed())
-            await pvp_message.edit(content=f"**{player}** Your turn! React to this message to make a move.\n\n{comment}")
-
-            # add reactions
-            await pvp_message.add_reaction(emoji='⚔️')
-            await pvp_message.add_reaction(emoji='🛡️')
+            await pvp_message.edit(content=f"**{player}** Your turn! Click a button to make a move.\n\n{comment}")
 
             healing_potion_emote = self.client.get_emoji(_json.get_emote_id("healing_potion"))
-            await pvp_message.add_reaction(emoji=healing_potion_emote)
 
-            def checkforR2(reaction, msg):
-                return msg == target and reaction.emoji in ['⚔️', '🛡️', healing_potion_emote]
-            def checkforR3(reaction, msg):
-                return msg == ctx.author and reaction.emoji in ['⚔️', '🛡️', healing_potion_emote]
+            # add buttons
+            buttons_2 = [
+                Button(style=4, label="ATK", emoji='⚔️', custom_id="ATK_pvp"),
+                Button(style=1, label="DEF", emoji='🛡️', custom_id="DEF_pvp"),
+                Button(style=3, label="Heal", emoji=healing_potion_emote, custom_id="Heal_pvp"),
+            ],
+            await pvp_message.edit(components=list(buttons_2))
+
+            def checkforR2(res):
+                return res.user.id == target.id and res.channel.id == ctx.channel.id
+            def checkforR3(res):
+                return res.user.id == ctx.author.id and res.channel.id == ctx.channel.id
 
             # pvp starts
             while p_hp > 0 and e_hp > 0:
@@ -137,21 +143,26 @@ class pvp(commands.Cog):
 
                 if moves%2 != 0:
                     ## PLAYER MOVE
-                    await pvp_message.edit(content=f"**{player}** Your turn! React to this message to make a move.\n\n{comment}")
-                    reaction, msg = await self.client.wait_for('reaction_add', timeout=10, check=checkforR3)
-                    await pvp_message.remove_reaction(reaction.emoji, ctx.author)
+                    await pvp_message.edit(content=f"**{player}** Your turn! Click a button to make a move.\n\n{comment}")
 
-                    if reaction.emoji == '⚔️':
+                    try:
+                        res = await self.client.wait_for('button_click', timeout=10, check=checkforR3)
+                        await res.respond(type=6)
+                    except:
+                        await _c.timeout_button(pvp_message)
+                        return 
+
+                    if res.component.label.startswith("ATK"):
                         e_hp = combat.pvp_atk(e_hp, p_atk, p_acc, e_def, player)[1]
                         comment = str(combat.pvp_atk(e_hp, p_atk, p_acc, e_def, player)[2])
 
 
 
-                    elif reaction.emoji == '🛡️':
+                    elif res.component.label.startswith("DEF"):
                         pass
 
 
-                    elif reaction.emoji == healing_potion_emote:
+                    elif res.component.label.startswith("Heal"):
                         incr = p_hp*0.1
 
                         if p_hp != p_start_hp:
@@ -169,8 +180,13 @@ class pvp(commands.Cog):
                 else:
                     ## ENEMY MOVE
                     await pvp_message.edit(content=f"**{enemy}** Your turn! React to this message to make a move.\n\n{comment}")
-                    reaction, msg = await self.client.wait_for('reaction_add', timeout=10, check=checkforR2)
-                    await pvp_message.remove_reaction(reaction.emoji, target)
+
+                    try:
+                        res = await self.client.wait_for('button_click', timeout=10, check=checkforR2)
+                        await res.respond(type=6)
+                    except:
+                        await _c.timeout_button(pvp_message)
+                        return 
 
 
                 await pvp_message.edit(embed=display_pvp_embed())
