@@ -34,18 +34,18 @@ async def on_ready():
   game = discord.Game("ax help")
   await client.change_presence(status=discord.Status.online, activity=game)
 
-@client.event
-async def on_command_error(ctx, error):
-  if isinstance(error, commands.MissingRequiredArgument):
-    await ctx.send(embed=embeds.MRA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  elif isinstance(error, commands.MissingPermissions):
-    await ctx.send(embed=embeds.MP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  elif isinstance(error, commands.BotMissingPermissions):
-    await ctx.send(embed=embeds.BMP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  elif isinstance(error, commands.BadArgument):
-    await ctx.send(embed=embeds.BA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
-  else:
-      print(f"\n```{error}```")
+# @client.event
+# async def on_command_error(ctx, error):
+#   if isinstance(error, commands.MissingRequiredArgument):
+#     await ctx.send(embed=embeds.MRA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
+#   elif isinstance(error, commands.MissingPermissions):
+#     await ctx.send(embed=embeds.MP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
+#   elif isinstance(error, commands.BotMissingPermissions):
+#     await ctx.send(embed=embeds.BMP_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
+#   elif isinstance(error, commands.BadArgument):
+#     await ctx.send(embed=embeds.BA_error(ctx.author.name, ctx.author.discriminator, _db.get_prefix(ctx.message.guild.id)))
+#   else:
+#       print(f"\n```{error}```")
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
