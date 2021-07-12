@@ -5,6 +5,7 @@ import os
 from tools import _db, _json, tools, embeds
 from dotenv import load_dotenv
 from datetime import datetime
+import asyncio
 
 intents = discord.Intents.default()
 intents.members = True

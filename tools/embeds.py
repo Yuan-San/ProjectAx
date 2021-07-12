@@ -31,6 +31,22 @@ def inventory_item(amount, desc, item, stats, p, thumbnail):
 
     return em
 
+def hunt_embed(_cash, _xp, _item, _mob, _items):
+  #_cash = Money gathered when hunting
+  #_xp = XP collected from hunting
+  #_item = Item/Mob Drop Count (0-2) (2 drop was rare)
+  #_mob = What mob the Player found
+  #_items = If _item was 1/2, What kind of Item the player found
+  embed=discord.Embed(color=0xadcca6, title="Hunt Success!", description=f"You're Hunting inside the Forest and found {_mob}! You got {_xp} xp and {_cash} Cash.")
+  if _item == 1:
+    embed.add_field(name=f"A mob drop found! You found {_items} from Killing {_mob}")
+    return embed
+  elif _item == 2:
+    embed.add_field(name=f"A DOUBLE MOB DROP FOUND!!! You Found Double {_items} from Killing {_mob}")
+    return embed
+  else:
+    return embed
+
 def inventory_weapon(weapon, desc, thumbnail, p):
     dmg = _db.get_weapon_stats(weapon, "damage")
     acc = _db.get_weapon_stats(weapon, "accuracy")
