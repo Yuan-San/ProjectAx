@@ -36,7 +36,8 @@ class hunt(commands.cog):
       district = b["district"]
 
     if district == "Svart":
-     _items="Slime Ball"
+     itemlist=["Slime ball", "Healing Potion"]
+     _items=random.choice(list(itemlist))
      _cash=random.randint(15, 150)
      _xp=random.randint(30, 100)
      rolls=random.randint(1, 100)
@@ -49,3 +50,7 @@ class hunt(commands.cog):
     _mob = _json.get_mob()["Area 1"]
 
     await ctx.send(embed=embeds.hunt_embed(_cash, _xp, _item, _mob, _items))
+    
+def setup(client):
+    client.add_cog(hunt(client))
+    
